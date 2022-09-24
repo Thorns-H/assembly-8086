@@ -1,0 +1,17 @@
+< THE SYMBOL TABLE >  third.com  --  emu8086 assembler version: 4.08 
+===================================================================================================
+Name                     	Offset    	Size      	Type      	Segment   
+===================================================================================================
+MSG1                     	001DA     	-1        	LABEL     	(NOSEG)   
+MSG2                     	00200     	-1        	LABEL     	(NOSEG)   
+MSG3                     	00222     	-1        	LABEL     	(NOSEG)   
+MSG4                     	00248     	-1        	LABEL     	(NOSEG)   
+MSG5                     	0026E     	-1        	LABEL     	(NOSEG)   
+MSG6                     	00294     	-1        	LABEL     	(NOSEG)   
+MSG7                     	002BA     	-1        	LABEL     	(NOSEG)   
+MSG8                     	002E0     	-1        	LABEL     	(NOSEG)   
+MSG_TAIL                 	002F0     	-1        	LABEL     	(NOSEG)   
+===================================================================================================
+[ 23/09/2022  --  09:20:20 p. m. ] 
+< END >
+ 

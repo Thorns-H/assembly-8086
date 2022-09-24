@@ -1,0 +1,162 @@
+EMU8086 GENERATED LISTING. MACHINE CODE <- SOURCE.
+ 
+third.com -- emu8086 assembler version: 4.08  
+ 
+[ 23/09/2022  --  09:20:20 p. m. ] 
+ 
+===================================================================================================
+[LINE]     LOC: MACHINE CODE                          SOURCE
+===================================================================================================
+ 
+[   1]        :                                       name "third"
+[   2]        :                                       
+[   3]        :                                       org  100h
+[   4]        :                                       
+[   5]    0100: B8 03 10                              mov ax, 1003h
+[   6]    0103: BB 00 00                              mov bx, 0
+[   7]    0106: CD 10                                 int 10h
+[   8]        :                                       
+[   9]    0108: BA 05 07                              mov dx, 0705h
+[  10]    010B: BB 00 00                              mov bx, 0
+[  11]    010E: B3 9F                                 mov bl, 10011111b
+[  12]    0110: B9 26 00                              mov cx, msg1_size
+[  13]    0113: B0 01                                 mov al, 01b
+[  14]    0115: BD DA 01                              mov bp, msg1
+[  15]    0118: B4 13                                 mov ah, 13h
+[  16]    011A: CD 10                                 int 10h
+[  17]        :                                       
+[  18]    011C: BA 05 09                              mov dx, 0905h
+[  19]    011F: BB 00 00                              mov bx, 0
+[  20]    0122: B3 9F                                 mov bl, 10011111b
+[  21]    0124: B9 22 00                              mov cx, msg2_size
+[  22]    0127: B0 01                                 mov al, 01b
+[  23]    0129: BD 00 02                              mov bp, msg2
+[  24]    012C: B4 13                                 mov ah, 13h
+[  25]    012E: CD 10                                 int 10h
+[  26]        :                                       
+[  27]    0130: BA 05 0A                              mov dx, 0A05h
+[  28]    0133: BB 00 00                              mov bx, 0
+[  29]    0136: B3 9F                                 mov bl, 10011111b
+[  30]    0138: B9 26 00                              mov cx, msg3_size
+[  31]    013B: B0 01                                 mov al, 01b
+[  32]    013D: BD 22 02                              mov bp, msg3
+[  33]    0140: B4 13                                 mov ah, 13h
+[  34]    0142: CD 10                                 int 10h
+[  35]        :                                       
+[  36]    0144: BA 05 0B                              mov dx, 0B05h
+[  37]    0147: BB 00 00                              mov bx, 0
+[  38]    014A: B3 9F                                 mov bl, 10011111b
+[  39]    014C: B9 26 00                              mov cx, msg4_size
+[  40]    014F: B0 01                                 mov al, 01b
+[  41]    0151: BD 48 02                              mov bp, msg4
+[  42]    0154: B4 13                                 mov ah, 13h
+[  43]    0156: CD 10                                 int 10h
+[  44]        :                                       
+[  45]    0158: BA 05 0C                              mov dx, 0C05h
+[  46]    015B: BB 00 00                              mov bx, 0
+[  47]    015E: B3 9F                                 mov bl, 10011111b
+[  48]    0160: B9 26 00                              mov cx, msg5_size
+[  49]    0163: B0 01                                 mov al, 01b
+[  50]    0165: BD 6E 02                              mov bp, msg5
+[  51]    0168: B4 13                                 mov ah, 13h
+[  52]    016A: CD 10                                 int 10h
+[  53]        :                                       
+[  54]    016C: BA 05 0D                              mov dx, 0D05h
+[  55]    016F: BB 00 00                              mov bx, 0
+[  56]    0172: B3 9F                                 mov bl, 10011111b
+[  57]    0174: B9 26 00                              mov cx, msg6_size
+[  58]    0177: B0 01                                 mov al, 01b
+[  59]    0179: BD 94 02                              mov bp, msg6
+[  60]    017C: B4 13                                 mov ah, 13h
+[  61]    017E: CD 10                                 int 10h
+[  62]        :                                       
+[  63]    0180: BA 05 0E                              mov dx, 0E05h
+[  64]    0183: BB 00 00                              mov bx, 0
+[  65]    0186: B3 9F                                 mov bl, 10011111b
+[  66]    0188: B9 26 00                              mov cx, msg7_size
+[  67]    018B: B0 01                                 mov al, 01b
+[  68]    018D: BD BA 02                              mov bp, msg7
+[  69]    0190: B4 13                                 mov ah, 13h
+[  70]    0192: CD 10                                 int 10h
+[  71]        :                                       
+[  72]    0194: BA 05 10                              mov dx, 1005h
+[  73]    0197: BB 00 00                              mov bx, 0
+[  74]    019A: B3 9F                                 mov bl, 10011111b
+[  75]    019C: B9 10 00                              mov cx, msg8_size
+[  76]    019F: B0 01                                 mov al, 01b
+[  77]    01A1: BD E0 02                              mov bp, msg8
+[  78]    01A4: B4 13                                 mov ah, 13h
+[  79]    01A6: CD 10                                 int 10h
+[  80]        :                                       
+[  81]    01A8: B4 00                                 mov ah, 0
+[  82]    01AA: CD 16                                 int 16h
+[  83]        :                                       
+[  84]    01AC: B8 00 00                              mov ax, 0
+[  85]    01AF: BB 00 00                              mov bx, 0
+[  86]    01B2: B9 00 00                              mov cx, 0
+[  87]    01B5: BA 00 00                              mov dx, 0
+[  88]        :                                       
+[  89]    01B8: 8A 16 10 04                           mov dl, [0x410]
+[  90]    01BC: 02 16 11 04                           add dl, [0x411]
+[  91]    01C0: 80 D6 00                              adc dh, 0
+[  92]        :                                       
+[  93]    01C3: 02 16 12 04                           add dl, [0x412]
+[  94]    01C7: 80 D6 00                              adc dh, 0
+[  95]        :                                       
+[  96]    01CA: 02 16 13 04                           add dl, [0x413]
+[  97]    01CE: 80 D6 00                              adc dh, 0
+[  98]        :                                       
+[  99]    01D1: 02 16 14 04                           add dl, [0x414]
+[ 100]    01D5: 80 D6 00                              adc dh, 0
+[ 101]        :                                       
+[ 102]    01D8: CD 20                                 int 20h
+[ 103]        :                                       
+[ 104]        :                                       
+[ 105]    01DA: 53 65 63 63 69 6F 6E 20 44 30 35 20   msg1:         db "Seccion D05 - Abraham Magaña Hernandez"
+                2D 20 41 62 72 61 68 61 6D 20 4D 61 
+                67 61 F1 61 20 48 65 72 6E 61 6E 64 
+                65 7A                               
+[ 106]    0200: 49 6E 73 65 72 74 61 72 20 64 61 74   msg2:         db "Insertar datos en las direcciones:"
+                6F 73 20 65 6E 20 6C 61 73 20 64 69 
+                72 65 63 63 69 6F 6E 65 73 3A       
+[ 107]    0222: 44 61 74 6F 20 31 20 64 65 20 38 20   msg3:         db "Dato 1 de 8 bits en direcciones 0x0410"
+                62 69 74 73 20 65 6E 20 64 69 72 65 
+                63 63 69 6F 6E 65 73 20 30 78 30 34 
+                31 30                               
+[ 108]    0248: 44 61 74 6F 20 32 20 64 65 20 38 20   msg4:         db "Dato 2 de 8 bits en direcciones 0x0411"
+                62 69 74 73 20 65 6E 20 64 69 72 65 
+                63 63 69 6F 6E 65 73 20 30 78 30 34 
+                31 31                               
+[ 109]    026E: 44 61 74 6F 20 33 20 64 65 20 38 20   msg5:         db "Dato 3 de 8 bits en direcciones 0x0412"
+                62 69 74 73 20 65 6E 20 64 69 72 65 
+                63 63 69 6F 6E 65 73 20 30 78 30 34 
+                31 32                               
+[ 110]    0294: 44 61 74 6F 20 34 20 64 65 20 38 20   msg6:         db "Dato 4 de 8 bits en direcciones 0x0413"
+                62 69 74 73 20 65 6E 20 64 69 72 65 
+                63 63 69 6F 6E 65 73 20 30 78 30 34 
+                31 33                               
+[ 111]    02BA: 44 61 74 6F 20 35 20 64 65 20 38 20   msg7:         db "Dato 5 de 8 bits en direcciones 0x0414"
+                62 69 74 73 20 65 6E 20 64 69 72 65 
+                63 63 69 6F 6E 65 73 20 30 78 30 34 
+                31 34                               
+[ 112]    02E0: 52 65 73 75 6C 74 61 64 6F 20 65 6E   msg8:         db "Resultado en: DX"
+                3A 20 44 58                         
+[ 113]        :                                       
+[ 114]    02F0:                                       msg_tail:
+[ 115]        :                                       msg1_size = msg2 - msg1
+[ 116]        :                                       msg2_size = msg3 - msg2
+[ 117]        :                                       msg3_size = msg4 - msg3
+[ 118]        :                                       msg4_size = msg5 - msg4
+[ 119]        :                                       msg5_size = msg6 - msg5
+[ 120]        :                                       msg6_size = msg7 - msg6
+[ 121]        :                                       msg7_size = msg8 - msg7
+[ 122]        :                                       msg8_size = msg_tail - msg8
+[ 123]        :                                       
+ 
+===================================================================================================
+ 
+
+
+
+
+===================================================================================================
