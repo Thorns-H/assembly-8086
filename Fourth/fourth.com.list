@@ -1,0 +1,126 @@
+EMU8086 GENERATED LISTING. MACHINE CODE <- SOURCE.
+ 
+fourth.com -- emu8086 assembler version: 4.08  
+ 
+[ 07/10/2022  --  06:10:53 p. m. ] 
+ 
+===================================================================================================
+[LINE]     LOC: MACHINE CODE                          SOURCE
+===================================================================================================
+ 
+[   1]        :                                       name "fourth"
+[   2]        :                                       
+[   3]        :                                       org  100h
+[   4]        :                                       	
+[   5]    0100: E9 B6 00                              .data
+[   6]        :                                       
+[   7]    0103: 3C 00                                 Base dw 60; Base a Multiplicar
+[   8]    0105: 03 00                                 Exp dw 3; Exponente a Elevar la Base
+[   9]    0107: 00 00                                 aux dw 0
+[  10]        :                                       
+[  11]    0109: 00 00 00 00                           rx dd 0
+[  12]    010D: 00 00                                 rh dw 0
+[  13]    010F: 00 00                                 rl dw 0
+[  14]        :                                       
+[  15]    0111: 53 65 63 63 69 6F 6E 20 44 30 35 20   msg1:   db "Seccion D05 - Abraham Magana Hernandez"
+                2D 20 41 62 72 61 68 61 6D 20 4D 61 
+                67 61 6E 61 20 48 65 72 6E 61 6E 64 
+                65 7A                               
+[  16]    0137: 49 6E 74 72 6F 64 75 63 65 20 74 75   msg2:   db "Introduce tus Datos en:"
+                73 20 44 61 74 6F 73 20 65 6E 3A    
+[  17]    014E: 42 61 73 65 20 2D 20 20 56 61 72 69   msg3:   db "Base -  Variable de Entrada de 16 bits"
+                61 62 6C 65 20 64 65 20 45 6E 74 72 
+                61 64 61 20 64 65 20 31 36 20 62 69 
+                74 73                               
+[  18]    0174: 45 78 70 20 2D 20 56 61 72 69 61 62   msg4:   db "Exp - Variable de Entrada de 16 bits"
+                6C 65 20 64 65 20 45 6E 74 72 61 64 
+                61 20 64 65 20 31 36 20 62 69 74 73 
+                                                    
+[  19]    0198: 52 58 20 2D 20 56 61 72 69 61 62 6C   msg5:   db "RX - Variable de Salida (32 bits)"
+                65 20 64 65 20 53 61 6C 69 64 61 20 
+                28 33 32 20 62 69 74 73 29          
+[  20]        :                                       
+[  21]    01B9:                                       msg_tail:
+[  22]        :                                       
+[  23]        :                                       msg1_size = msg2 - msg1
+[  24]        :                                       msg2_size = msg3 - msg2
+[  25]        :                                       msg3_size = msg4 - msg3
+[  26]        :                                       msg4_size = msg5 - msg4
+[  27]        :                                       msg5_size = msg_tail - msg5
+[  28]        :                                       
+[  29]    01B9:                                       .code
+[  30]        :                                       
+[  31]    01B9: B8 00 00                              mov ax, 0
+[  32]    01BC: BB 00 00                              mov bx, 0
+[  33]    01BF: B9 00 00                              mov cx, 0
+[  34]    01C2: BA 00 00                              mov dx, 0
+[  35]        :                                       
+[  36]    01C5: B8 03 10                              mov ax, 1003h
+[  37]    01C8: CD 10                                 int 10h
+[  38]        :                                       
+[  39]    01CA: BA 05 07                              mov dx, 0705h
+[  40]    01CD: B3 9F                                 mov bl, 10011111b
+[  41]    01CF: B9 26 00                              mov cx, msg1_size
+[  42]    01D2: B0 01                                 mov al, 01b
+[  43]    01D4: BD 11 01                              mov bp, msg1
+[  44]    01D7: B4 13                                 mov ah, 13h
+[  45]    01D9: CD 10                                 int 10h
+[  46]        :                                       
+[  47]    01DB: BA 05 09                              mov dx, 0905h
+[  48]    01DE: B9 17 00                              mov cx, msg2_size
+[  49]    01E1: BD 37 01                              mov bp, msg2
+[  50]    01E4: CD 10                                 int 10h
+[  51]        :                                       
+[  52]    01E6: BA 05 0A                              mov dx, 0A05h
+[  53]    01E9: B9 26 00                              mov cx, msg3_size
+[  54]    01EC: BD 4E 01                              mov bp, msg3
+[  55]    01EF: CD 10                                 int 10h
+[  56]        :                                       
+[  57]    01F1: BA 05 0B                              mov dx, 0B05h
+[  58]    01F4: B9 24 00                              mov cx, msg4_size
+[  59]    01F7: BD 74 01                              mov bp, msg4
+[  60]    01FA: CD 10                                 int 10h
+[  61]        :                                       
+[  62]    01FC: BA 05 0C                              mov dx, 0C05h
+[  63]    01FF: B9 21 00                              mov cx, msg5_size
+[  64]    0202: BD 98 01                              mov bp, msg5
+[  65]    0205: CD 10                                 int 10h
+[  66]        :                                       
+[  67]    0207:                                       operation:
+[  68]        :                                       
+[  69]    0207: 8B 0E 05 01                           mov cx, [Exp]
+[  70]    020B: 49                                    dec cx
+[  71]    020C: A1 03 01                              mov ax, [Base]
+[  72]    020F: A3 0F 01                              mov [rl], ax
+[  73]        :                                       
+[  74]    0212:                                       mult:
+[  75]        :                                       
+[  76]    0212: A1 0F 01                              mov ax, [rl]
+[  77]    0215: F7 26 03 01                           mul [Base]
+[  78]    0219: A3 0F 01                              mov [rl], ax
+[  79]    021C: 89 16 07 01                           mov [aux], dx
+[  80]        :                                       
+[  81]    0220: A1 0D 01                              mov ax, [rh]
+[  82]    0223: F7 26 03 01                           mul [Base]
+[  83]    0227: A3 0D 01                              mov [rh], ax
+[  84]        :                                       
+[  85]    022A: A1 07 01                              mov ax, [aux]
+[  86]    022D: 01 06 0D 01                           add [rh], ax
+[  87]        :                                       
+[  88]    0231: E2 DF                                 loop mult
+[  89]        :                                       
+[  90]    0233: A1 0D 01                              mov ax, [rh]
+[  91]    0236: A3 0B 01                              mov [rx + 2], ax
+[  92]    0239: A1 0F 01                              mov ax, [rl]
+[  93]    023C: A3 09 01                              mov [rx], ax
+[  94]        :                                       
+[  95]    023F: CD 20                                 int 20h
+[  96]        :                                       
+ 
+===================================================================================================
+ 
+
+
+
+
+===================================================================================================

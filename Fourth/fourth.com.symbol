@@ -1,0 +1,23 @@
+< THE SYMBOL TABLE >  fourth.com  --  emu8086 assembler version: 4.08 
+===================================================================================================
+Name                     	Offset    	Size      	Type      	Segment   
+===================================================================================================
+BASE                     	00103     	2         	VAR       	(NOSEG)   
+EXP                      	00105     	2         	VAR       	(NOSEG)   
+AUX                      	00107     	2         	VAR       	(NOSEG)   
+RX                       	00109     	2         	VAR       	(NOSEG)   
+RH                       	0010D     	2         	VAR       	(NOSEG)   
+RL                       	0010F     	2         	VAR       	(NOSEG)   
+MSG1                     	00111     	-1        	LABEL     	(NOSEG)   
+MSG2                     	00137     	-1        	LABEL     	(NOSEG)   
+MSG3                     	0014E     	-1        	LABEL     	(NOSEG)   
+MSG4                     	00174     	-1        	LABEL     	(NOSEG)   
+MSG5                     	00198     	-1        	LABEL     	(NOSEG)   
+MSG_TAIL                 	001B9     	-1        	LABEL     	(NOSEG)   
+CODE                     	001B9     	-1        	LABEL     	(NOSEG)   
+OPERATION                	00207     	-1        	LABEL     	(NOSEG)   
+MULT                     	00212     	-1        	LABEL     	(NOSEG)   
+===================================================================================================
+[ 07/10/2022  --  06:10:53 p. m. ] 
+< END >
+ 
