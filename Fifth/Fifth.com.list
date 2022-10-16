@@ -1,0 +1,283 @@
+EMU8086 GENERATED LISTING. MACHINE CODE <- SOURCE.
+ 
+Fifth.com -- emu8086 assembler version: 4.08  
+ 
+[ 12/10/2022  --  08:37:10 p. m. ] 
+ 
+===================================================================================================
+[LINE]     LOC: MACHINE CODE                          SOURCE
+===================================================================================================
+ 
+[   1]        :                                       name "Fifth"
+[   2]        :                                       include 'emu8086.inc'
+[   3]        :                                       
+[   4]        :                                       org 100h
+[   5]    0100: EB 0F                                 jmp _set_string
+[   6]        :                                       
+[   7]    0102:                                       _variables:
+[   8]        :                                       
+[   9]    0102: 00 00 00 00                           input       db      ?,?,?,?
+[  10]    0106: 00 00                                 n16         db      ?,?
+[  11]    0108: 10 00                                 b           dw      16
+[  12]    010A: 00 00                                 tmp         dw      ?
+[  13]    010C: 00 00 00 00 00                        decimal     db      ?,?,?,?,?
+[  14]        :                                       
+[  15]    0111:                                       _set_string:
+[  16]        :                                       
+[  17]    0111: 33 C0                                 xor     ax,ax
+[  18]        :                                       
+[  19]    0113: BF 02 01                              lea     di,input ; Variable donde almacenamos el string
+[  20]    0116: BE 06 01                              lea     si,n16
+[  21]    0119: BA 05 00                              mov     dx,5 ; Buffer del String
+[  22]        :                                       
+[  23]    011C: 50 53 52 B4 02 B6 04 B2 12 B7 00 CD   gotoxy  18,4
+                10 5A 5B 58                         
+[  24]    012C: 50 56 EB 27 41 62 72 61 68 61 6D 20   print   "Abraham Magana Hernandez - 2022B - D05"
+                4D 61 67 61 6E 61 20 48 65 72 6E 61 
+                6E 64 65 7A 20 2D 20 32 30 32 32 42 
+                20 2D 20 44 30 35 00 BE 30 01 2E 8A 
+                04 3C 00 74 07 46 B4 0E CD 10 EB F2 
+                5E 58                               
+[  25]    016A: 50 53 52 B4 02 B6 05 B2 11 B7 00 CD   gotoxy  17,5
+                10 5A 5B 58                         
+[  26]    017A: 50 56 EB 28 53 65 6D 69 6E 61 72 69   print   "Seminario de Traductores de Lenguajes I"
+                6F 20 64 65 20 54 72 61 64 75 63 74 
+                6F 72 65 73 20 64 65 20 4C 65 6E 67 
+                75 61 6A 65 73 20 49 00 BE 7E 01 2E 
+                8A 04 3C 00 74 07 46 B4 0E CD 10 EB 
+                F2 5E 58                            
+[  27]    01B9: 50 53 52 B4 02 B6 07 B2 0F B7 00 CD   gotoxy  15,7
+                10 5A 5B 58                         
+[  28]    01C9: 50 56 EB 27 49 6E 67 72 65 73 61 20   print   "Ingresa el numero en hex, de 16 bits: "
+                65 6C 20 6E 75 6D 65 72 6F 20 65 6E 
+                20 68 65 78 2C 20 64 65 20 31 36 20 
+                62 69 74 73 3A 20 00 BE CD 01 2E 8A 
+                04 3C 00 74 07 46 B4 0E CD 10 EB F2 
+                5E 58                               
+[  29]        :                                       
+[  30]    0207: E8 1E 02                              call    get_string ; Llamos a la funcion para leer el string del usuario
+[  31]        :                                       
+[  32]    020A:                                       _start:
+[  33]        :                                       
+[  34]    020A: E8 43 01                              call    first_dec
+[  35]        :                                       
+[  36]    020D: 33 C9                                 xor cx,cx
+[  37]    020F: A1 08 01                              mov ax,b
+[  38]    0212: B5 00                                 mov ch,0
+[  39]    0214: B9 02 00                              mov cx,2
+[  40]        :                                       
+[  41]    0217: E8 FC 01                              call    hex_to_dec
+[  42]        :                                       
+[  43]    021A: B0 00                                 mov al,0
+[  44]    021C: A2 11 01                              mov decimal[5],al
+[  45]    021F: B8 00 00                              mov ax,0
+[  46]    0222: BB 00 00                              mov bx,0
+[  47]    0225: A1 0A 01                              mov ax,tmp
+[  48]    0228: BB 10 27                              mov bx,10000
+[  49]    022B: BA 00 00                              mov dx,0
+[  50]    022E: F7 F3                                 div bx
+[  51]    0230: A2 0C 01                              mov decimal[0],al
+[  52]        :                                       
+[  53]    0233: BB 00 00                              mov bx,0
+[  54]    0236: B8 00 00                              mov ax,0
+[  55]    0239: B3 0A                                 mov bl,10
+[  56]    023B: A0 0C 01                              mov al,decimal[0]
+[  57]    023E: 89 1E 08 01                           mov b,bx
+[  58]    0242: F7 26 08 01                           mul b
+[  59]    0246: A3 08 01                              mov b,ax
+[  60]        :                                       
+[  61]    0249: BB E8 03                              mov bx,1000
+[  62]    024C: A1 08 01                              mov ax,b
+[  63]    024F: 89 1E 08 01                           mov b,bx
+[  64]    0253: F7 26 08 01                           mul b
+[  65]    0257: A3 08 01                              mov b,ax
+[  66]    025A: A1 0A 01                              mov ax,tmp
+[  67]    025D: 2B 06 08 01                           sub ax,b
+[  68]    0261: A3 0A 01                              mov tmp,ax
+[  69]        :                                       
+[  70]    0264: A1 0A 01                              mov ax,tmp
+[  71]    0267: BB E8 03                              mov bx,1000
+[  72]    026A: F7 F3                                 div bx
+[  73]    026C: A2 0D 01                              mov decimal[1],al
+[  74]        :                                       
+[  75]    026F: B8 00 00                              mov ax,0
+[  76]    0272: A0 0D 01                              mov al,decimal[1]
+[  77]    0275: BB E8 03                              mov bx,1000
+[  78]    0278: 89 1E 08 01                           mov b,bx
+[  79]    027C: F7 26 08 01                           mul b
+[  80]    0280: A3 08 01                              mov b,ax
+[  81]    0283: A1 0A 01                              mov ax,tmp
+[  82]    0286: 2B 06 08 01                           sub ax,b
+[  83]    028A: A3 0A 01                              mov tmp,ax
+[  84]        :                                       
+[  85]    028D: BB 64 00                              mov bx,100
+[  86]    0290: A1 0A 01                              mov ax,tmp
+[  87]    0293: F7 F3                                 div bx
+[  88]    0295: A2 0E 01                              mov decimal[2],al
+[  89]        :                                       
+[  90]    0298: B8 00 00                              mov ax,0
+[  91]    029B: BB 00 00                              mov bx,0
+[  92]    029E: A0 0E 01                              mov al,decimal[2]
+[  93]    02A1: BB 64 00                              mov bx,100
+[  94]    02A4: 89 1E 08 01                           mov b,bx
+[  95]    02A8: F7 26 08 01                           mul b
+[  96]    02AC: A3 08 01                              mov b,ax
+[  97]    02AF: A1 0A 01                              mov ax,tmp
+[  98]    02B2: 2B 06 08 01                           sub ax,b
+[  99]    02B6: A3 0A 01                              mov tmp,ax
+[ 100]        :                                       
+[ 101]    02B9: B8 00 00                              mov ax,0
+[ 102]    02BC: BB 0A 00                              mov bx,10
+[ 103]    02BF: A1 0A 01                              mov ax,tmp
+[ 104]    02C2: F7 F3                                 div bx
+[ 105]    02C4: A2 0F 01                              mov decimal[3],al
+[ 106]        :                                       
+[ 107]    02C7: B8 00 00                              mov ax,0
+[ 108]    02CA: A0 0F 01                              mov al,decimal[3]
+[ 109]    02CD: BB 0A 00                              mov bx,10
+[ 110]    02D0: 89 1E 08 01                           mov b,bx
+[ 111]    02D4: F7 26 08 01                           mul b
+[ 112]    02D8: A3 08 01                              mov b,ax
+[ 113]    02DB: A1 0A 01                              mov ax,tmp
+[ 114]    02DE: 2B 06 08 01                           sub ax,b
+[ 115]    02E2: A3 0A 01                              mov tmp,ax
+[ 116]    02E5: A1 0A 01                              mov ax,tmp
+[ 117]    02E8: A2 10 01                              mov decimal[4],al
+[ 118]        :                                       
+[ 119]    02EB: B8 00 00                              mov ax, 0 ; Limpiamos el registro
+[ 120]    02EE: B4 30                                 mov ah, 30h ; Asignamos el valor 0 en ascii a un registro de 8 bits
+[ 121]        :                                       
+[ 122]        :                                       ; Como el numero esta entre el codigo ascii de 48 - 57, sumamos eso al valor
+[ 123]        :                                       
+[ 124]    02F0: 00 26 0C 01                           add decimal[0], ah
+[ 125]    02F4: 00 26 0D 01                           add decimal[1], ah
+[ 126]    02F8: 00 26 0E 01                           add decimal[2], ah
+[ 127]    02FC: 00 26 0F 01                           add decimal[3], ah
+[ 128]    0300: 00 26 10 01                           add decimal[4], ah
+[ 129]        :                                       
+[ 130]        :                                       ; Mostramos este arreglo en pantalla
+[ 131]        :                                       
+[ 132]    0304: 50 53 52 B4 02 B6 09 B2 15 B7 00 CD   gotoxy 21,9
+                10 5A 5B 58                         
+[ 133]    0314: 50 56 EB 1A 45 6C 20 6E 75 6D 65 72   print "El numero convertido es: "
+                6F 20 63 6F 6E 76 65 72 74 69 64 6F 
+                20 65 73 3A 20 00 BE 18 03 2E 8A 04 
+                3C 00 74 07 46 B4 0E CD 10 EB F2 5E 
+                58                                  
+[ 134]        :                                       
+[ 135]    0345: BF 0C 01                              lea    di, decimal ; Movemos los punteros para obtener el string guardado.
+[ 136]    0348: BE 0C 01                              lea    si, decimal
+[ 137]        :                                       
+[ 138]    034B: E8 29 01                              call   print_string ; Se encarga de imprimir el string.
+[ 139]        :                                       
+[ 140]    034E: CD 20                                 int 20h
+[ 141]        :                                       
+[ 142]        :                                       ; ---------- Conseguir los decimales, comparando primero entre rangos
+[ 143]        :                                       
+[ 144]    0350:                                       first_dec:
+[ 145]        :                                       
+[ 146]    0350: 80 2E 02 01 30                        sub     input[0], 30h
+[ 147]    0355: 80 3E 02 01 09                        cmp     input[0], 9h
+[ 148]    035A: 7E 11                                 jle     second_dec
+[ 149]    035C: 80 2E 02 01 07                        sub     input[0], 7h
+[ 150]    0361: 80 3E 02 01 0F                        cmp     input[0], 15
+[ 151]    0366: 7E 05                                 jle     second_dec
+[ 152]    0368: 80 2E 02 01 20                        sub     input[0], 20h
+[ 153]        :                                       
+[ 154]    036D:                                       second_dec:
+[ 155]        :                                       
+[ 156]    036D: 80 2E 03 01 30                        sub     input[1],30h
+[ 157]    0372: 80 3E 03 01 09                        cmp     input[1],9h
+[ 158]    0377: 7E 11                                 jle     third_dec
+[ 159]    0379: 80 2E 03 01 07                        sub     input[1],7h
+[ 160]    037E: 80 3E 03 01 0F                        cmp     input[1],15
+[ 161]    0383: 7E 05                                 jle     third_dec
+[ 162]    0385: 80 2E 03 01 20                        sub     input[1],20h
+[ 163]        :                                       
+[ 164]    038A:                                       third_dec:
+[ 165]        :                                       
+[ 166]    038A: 80 2E 04 01 30                        sub     input[2],30h
+[ 167]    038F: 80 3E 04 01 09                        cmp     input[2],9h
+[ 168]    0394: 7E 11                                 jle     fourth_dec
+[ 169]    0396: 80 2E 04 01 07                        sub     input[2],7h
+[ 170]    039B: 80 3E 04 01 0F                        cmp     input[2],15
+[ 171]    03A0: 7E 05                                 jle     fourth_dec
+[ 172]    03A2: 80 2E 04 01 20                        sub     input[2],20h
+[ 173]        :                                       
+[ 174]    03A7:                                       fourth_dec:
+[ 175]        :                                       
+[ 176]    03A7: 80 2E 05 01 30                        sub     input[3],30h
+[ 177]    03AC: 80 3E 05 01 09                        cmp     input[3],9h
+[ 178]    03B1: 7E 11                                 jle     exit_convertion
+[ 179]    03B3: 80 2E 05 01 07                        sub     input[3],7h
+[ 180]    03B8: 80 3E 05 01 0F                        cmp     input[3],15
+[ 181]    03BD: 7E 05                                 jle     exit_convertion
+[ 182]    03BF: 80 2E 05 01 20                        sub     input[3],20h
+[ 183]        :                                       
+[ 184]    03C4:                                       exit_convertion:
+[ 185]    03C4: C3                                    ret
+[ 186]        :                                       
+[ 187]        :                                       ; ---------- Convertir el hexadecimal a decimal
+[ 188]        :                                       
+[ 189]    03C5:                                       _initial_h1: ; Apartado solamente del primer dato
+[ 190]        :                                       
+[ 191]    03C5: F7 26 08 01                           mul b
+[ 192]    03C9: E2 FA                                 loop _initial_h1
+[ 193]    03CB: A3 08 01                              mov b,ax
+[ 194]    03CE: 8A 1E 02 01                           mov bl,input[0]
+[ 195]    03D2: 89 1E 0A 01                           mov tmp,bx
+[ 196]    03D6: F7 26 0A 01                           mul tmp
+[ 197]    03DA: A3 0A 01                              mov tmp,ax
+[ 198]    03DD: C3                                    ret
+[ 199]        :                                       
+[ 200]    03DE:                                       _rest_hv: ; Apartado del resto
+[ 201]        :                                       
+[ 202]    03DE: B8 10 00                              mov ax,16
+[ 203]    03E1: A3 08 01                              mov b,ax
+[ 204]    03E4: F7 26 08 01                           mul b
+[ 205]    03E8: 8A 1E 03 01                           mov bl,input[1]
+[ 206]    03EC: 89 1E 08 01                           mov b,bx
+[ 207]    03F0: F7 26 08 01                           mul b
+[ 208]    03F4: A3 08 01                              mov b,ax
+[ 209]    03F7: 01 06 0A 01                           add tmp,ax
+[ 210]        :                                       
+[ 211]    03FB: B8 10 00                              mov ax,16
+[ 212]    03FE: 8A 1E 04 01                           mov bl,input[2]
+[ 213]    0402: 89 1E 08 01                           mov b,bx
+[ 214]    0406: F7 26 08 01                           mul b
+[ 215]    040A: 01 06 0A 01                           add tmp,ax
+[ 216]        :                                       
+[ 217]    040E: A0 05 01                              mov al,input[3]
+[ 218]    0411: 01 06 0A 01                           add tmp,ax
+[ 219]    0415: C3                                    ret
+[ 220]        :                                       
+[ 221]    0416:                                       hex_to_dec:
+[ 222]        :                                       
+[ 223]    0416: E8 AC FF                              call _initial_h1
+[ 224]    0419: E8 C2 FF                              call _rest_hv
+[ 225]        :                                       
+[ 226]    041C: BF 0C 01                              lea     di,decimal ; Preparamos la salida de datos por print
+[ 227]    041F: BE 06 01                              lea     si,n16
+[ 228]    0422: BA 06 00                              mov     dx,6 ; Buffer
+[ 229]        :                                       
+[ 230]    0425: C3                                    ret
+[ 231]        :                                       
+[ 232]    0426: EB 4D 50 51 57 52 B9 00 00 83 FA 01   DEFINE_GET_STRING
+                76 3C 4A B4 00 CD 16 3C 0D 74 30 3C 
+                08 75 1E E3 F2 49 4F 50 B0 08 B4 0E 
+                CD 10 58 50 B0 20 B4 0E CD 10 58 50 
+                B0 08 B4 0E CD 10 58 EB D6 3B CA 73 
+                D2 88 05 47 41 B4 0E CD 10 EB C8 C6 
+                05 00 5A 5F 59 58 C3                
+[ 233]    0475: EB 12 50 56 8A 04 3C 00 74 07 46 B4   DEFINE_PRINT_STRING
+                0E CD 10 EB F3 5E 58 C3             
+[ 234]        :                                       END
+[ 235]        :                                       
+ 
+===================================================================================================
+ 
+
+
+
+
+===================================================================================================
