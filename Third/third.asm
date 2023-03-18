@@ -8,11 +8,11 @@
 
     mov dx, 0705h     
     mov bx, 0         
-    mov bl, 10011111b 
-    mov cx, msg1_size  
-    mov al, 01b       
+    mov bl, 10011111b
+    mov cx, msg1_size 
+    mov al, 01b    
     mov bp, msg1
-    mov ah, 13h       
+    mov ah, 13h    
     int 10h  
     
     mov dx, 0905h     
@@ -102,7 +102,7 @@
     int 20h
       
     
-msg1:         db "Seccion D05 - Abraham Magaña Hernandez"
+msg1:         db "Seccion D05 - Abraham MagaÃ±a Hernandez"
 msg2:         db "Insertar datos en las direcciones:"
 msg3:         db "Dato 1 de 8 bits en direcciones 0x0410"
 msg4:         db "Dato 2 de 8 bits en direcciones 0x0411"

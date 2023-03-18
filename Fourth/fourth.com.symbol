@@ -2,22 +2,25 @@
 ===================================================================================================
 Name                     	Offset    	Size      	Type      	Segment   
 ===================================================================================================
-BASE                     	00103     	2         	VAR       	(NOSEG)   
-EXP                      	00105     	2         	VAR       	(NOSEG)   
-AUX                      	00107     	2         	VAR       	(NOSEG)   
-RX                       	00109     	2         	VAR       	(NOSEG)   
-RH                       	0010D     	2         	VAR       	(NOSEG)   
-RL                       	0010F     	2         	VAR       	(NOSEG)   
-MSG1                     	00111     	-1        	LABEL     	(NOSEG)   
-MSG2                     	00137     	-1        	LABEL     	(NOSEG)   
-MSG3                     	0014E     	-1        	LABEL     	(NOSEG)   
-MSG4                     	00174     	-1        	LABEL     	(NOSEG)   
-MSG5                     	00198     	-1        	LABEL     	(NOSEG)   
-MSG_TAIL                 	001B9     	-1        	LABEL     	(NOSEG)   
-CODE                     	001B9     	-1        	LABEL     	(NOSEG)   
-OPERATION                	00207     	-1        	LABEL     	(NOSEG)   
-MULT                     	00212     	-1        	LABEL     	(NOSEG)   
+CODE                     	00100     	-1        	LABEL     	(NOSEG)   
+OPERATION                	0015C     	-1        	LABEL     	(NOSEG)   
+DATA                     	0016B     	-1        	LABEL     	(NOSEG)   
+BASE                     	0016B     	2         	VAR       	(NOSEG)   
+EXP                      	0016D     	2         	VAR       	(NOSEG)   
+AUX                      	0016F     	2         	VAR       	(NOSEG)   
+RX                       	00171     	2         	VAR       	(NOSEG)   
+RH                       	00175     	2         	VAR       	(NOSEG)   
+RL                       	00177     	2         	VAR       	(NOSEG)   
+MSG1                     	00179     	-1        	LABEL     	(NOSEG)   
+MSG2                     	0019F     	-1        	LABEL     	(NOSEG)   
+MSG3                     	001B6     	-1        	LABEL     	(NOSEG)   
+MSG4                     	001DC     	-1        	LABEL     	(NOSEG)   
+MSG5                     	00200     	-1        	LABEL     	(NOSEG)   
+MSG_TAIL                 	00221     	-1        	LABEL     	(NOSEG)   
+MULT                     	00221     	-1        	LABEL     	(NOSEG)   
+FINISH                   	00246     	-1        	LABEL     	(NOSEG)   
+OTHER                    	00253     	-1        	LABEL     	(NOSEG)   
 ===================================================================================================
-[ 07/10/2022  --  06:10:53 p. m. ] 
+[ 26/10/2022  --  10:45:15 a. m. ] 
 < END >
  

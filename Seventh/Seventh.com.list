@@ -1,0 +1,549 @@
+EMU8086 GENERATED LISTING. MACHINE CODE <- SOURCE.
+ 
+Seventh.com -- emu8086 assembler version: 4.08  
+ 
+[ 28/11/2022  --  12:00:21 p. m. ] 
+ 
+===================================================================================================
+[LINE]     LOC: MACHINE CODE                          SOURCE
+===================================================================================================
+ 
+[   1]        :                                       name "Seventh"
+[   2]        :                                       include "emu8086.inc"
+[   3]        :                                       org 100h
+[   4]        :                                       
+[   5]    0100:                                       start:
+[   6]    0100: 33 C0                                 xor     ax,ax
+[   7]    0102: A3 5E 05                              mov     [error],ax
+[   8]    0105: A3 F9 04                              mov     [iterator],ax
+[   9]    0108: B0 03                                 mov     al,03h
+[  10]    010A: B4 00                                 mov     ah,0
+[  11]    010C: CD 10                                 int     10h
+[  12]        :                                       
+[  13]    010E: B5 06                                 mov     ch,6
+[  14]    0110: B1 07                                 mov     cl,7
+[  15]    0112: B4 01                                 mov     ah,1
+[  16]    0114: CD 10                                 int     10h
+[  17]        :                                       
+[  18]    0116: 50 53 52 B4 02 B6 01 B2 14 B7 00 CD   GOTOXY  20,1
+                10 5A 5B 58                         
+[  19]    0126: BE 64 05                              lea     si,myData_1
+[  20]    0129: E8 E4 05                              call    print_string
+[  21]    012C: 50 53 52 B4 02 B6 02 B2 0B B7 00 CD   GOTOXY  11,2
+                10 5A 5B 58                         
+[  22]    013C: BE 8B 05                              lea     si,myData_2
+[  23]    013F: E8 CE 05                              call    print_string
+[  24]        :                                       
+[  25]    0142: 50 53 52 B4 02 B6 04 B2 0F B7 00 CD   GOTOXY  15,4
+                10 5A 5B 58                         
+[  26]    0152: BE 28 06                              lea     si,infoFirst
+[  27]    0155: E8 B8 05                              call    print_string
+[  28]        :                                       
+[  29]    0158: 50 53 52 B4 02 B6 05 B2 14 B7 00 CD   GOTOXY  20,5
+                10 5A 5B 58                         
+[  30]    0168: BE 5C 06                              lea     si, infoSecond
+[  31]    016B: E8 A2 05                              call    print_string
+[  32]        :                                       
+[  33]    016E: 50 53 52 B4 02 B6 07 B2 03 B7 00 CD   GOTOXY  3,7
+                10 5A 5B 58                         
+[  34]    017E: BE CB 05                              lea     si,getFirstFileName
+[  35]    0181: E8 8C 05                              call    print_string
+[  36]        :                                       
+[  37]    0184: BE DB 04                              lea     si,nameReadFile
+[  38]    0187: B9 1E 00                              mov     cx,30
+[  39]    018A: E8 73 01                              call    getString
+[  40]        :                                       
+[  41]    018D: 50 53 52 B4 02 B6 08 B2 03 B7 00 CD   GOTOXY  3,8
+                10 5A 5B 58                         
+[  42]    019D: BE F8 05                              lea     si,getSecondFileName
+[  43]    01A0: E8 6D 05                              call    print_string
+[  44]        :                                       
+[  45]    01A3: BE B5 04                              lea     si,nameOutFile
+[  46]    01A6: B9 1E 00                              mov     cx,30
+[  47]    01A9: E8 54 01                              call    getString
+[  48]    01AC: BA B5 04                              lea     dx,nameOutFile
+[  49]    01AF: 33 C9                                 xor     cx,cx
+[  50]    01B1: E8 E7 01                              call    makeFile
+[  51]    01B4: F7 06 5E 05 0F 00                     test    [error],0x0f
+[  52]    01BA: 75 35                                 jnz     closeRutine
+[  53]    01BC: A1 D5 04                              mov     ax,[handler]
+[  54]    01BF: A3 D9 04                              mov     [secondFile],ax
+[  55]        :                                       
+[  56]    01C2: BA DB 04                              lea     dx,nameReadFile
+[  57]    01C5: B0 00                                 mov     al,0
+[  58]    01C7: E8 F0 01                              call    openFile
+[  59]    01CA: F7 06 5E 05 0F 00                     test    [error],0x0f
+[  60]    01D0: 75 1F                                 jnz     closeRutine
+[  61]    01D2: A1 D5 04                              mov     ax,[handler]
+[  62]    01D5: A3 D7 04                              mov     [firstFile],ax
+[  63]        :                                       
+[  64]    01D8: E8 51 00                              call    getArch
+[  65]        :                                       
+[  66]    01DB: 8B 1E D7 04                           mov     bx,[firstFile]
+[  67]    01DF: 89 1E D5 04                           mov     [handler],bx
+[  68]    01E3: E8 F6 01                              call    closeFile
+[  69]        :                                       
+[  70]    01E6: 8B 1E D9 04                           mov     bx,[secondFile]
+[  71]    01EA: 89 1E D5 04                           mov     [handler],bx
+[  72]    01EE: E8 EB 01                              call    closeFile
+[  73]    01F1:                                       closeRutine:
+[  74]    01F1: 33 C0                                 xor     ax,ax
+[  75]    01F3: CD 20                                 int     20H
+[  76]        :                                       
+[  77]        :                                       ; ---------- Helpers ---------- ;
+[  78]        :                                       
+[  79]    01F5:                                       castAscii:
+[  80]    01F5: 50                                    push    ax
+[  81]    01F6: 53                                    push    bx
+[  82]    01F7: 52                                    push    dx
+[  83]    01F8: 57                                    push    di
+[  84]    01F9: 33 D2                                 xor     dx,dx
+[  85]    01FB: 8B 1E D3 04                           mov     bx,[base]
+[  86]    01FF: BF 04 05                              lea     di,16BAscii+9
+[  87]    0202: A1 08 05                              mov     ax,[16Value]
+[  88]    0205:                                       convertBucle:
+[  89]    0205: 3B C3                                 cmp     ax,bx
+[  90]    0207: 7C 14                                 jl      endConversion
+[  91]    0209: F7 F3                                 div     bx
+[  92]    020B: 80 C2 30                              add     dl,0x30
+[  93]    020E: 80 FA 3A                              cmp     dl,0x3A
+[  94]    0211: 7C 03                                 jl      value
+[  95]    0213: 80 C2 07                              add     dl,7
+[  96]    0216:                                       value:
+[  97]    0216: 88 15                                 mov     [di],dl
+[  98]    0218: 4F                                    dec     di
+[  99]    0219: 33 D2                                 xor     dx,dx
+[ 100]    021B: EB E8                                 jmp     convertBucle
+[ 101]    021D:                                       endConversion:
+[ 102]    021D: 04 30                                 add     al,0x30
+[ 103]    021F: 3C 3A                                 cmp     al,0x3A
+[ 104]    0221: 7C 02                                 jl      valuePop
+[ 105]    0223: 04 07                                 add     al,7
+[ 106]    0225:                                       valuePop:
+[ 107]    0225: 88 05                                 mov     [di],al
+[ 108]    0227: 5F                                    pop     di
+[ 109]    0228: 5A                                    pop     dx
+[ 110]    0229: 5B                                    pop     bx
+[ 111]    022A: 58                                    pop     ax
+[ 112]    022B: C3                                    ret
+[ 113]        :                                       
+[ 114]    022C:                                       getArch:
+[ 115]    022C: 50                                    push    ax
+[ 116]    022D: 51                                    push    cx
+[ 117]    022E: 52                                    push    dx
+[ 118]    022F: 55                                    push    bp
+[ 119]        :                                       
+[ 120]    0230:                                       newLine:
+[ 121]    0230: 33 C9                                 xor     cx,cx
+[ 122]    0232: BA 0D 05                              lea     dx,line
+[ 123]    0235: 49                                    dec     cx
+[ 124]    0236: 4A                                    dec     dx
+[ 125]        :                                       
+[ 126]    0237:                                       newLetter:
+[ 127]    0237: 41                                    inc     cx
+[ 128]    0238: 42                                    inc     dx
+[ 129]    0239: A1 D7 04                              mov     ax,[firstFile]
+[ 130]    023C: A3 D5 04                              mov     [handler],ax
+[ 131]    023F: E8 B8 01                              call    readLetterFromFile
+[ 132]    0242: F7 06 5E 05 0F 00                     test    [error],0x0F
+[ 133]    0248: 75 3A                                 jnz     EOF
+[ 134]    024A: F6 06 0A 05 FF                        test    [aux],0xFF
+[ 135]    024F: 74 33                                 jz      EOF
+[ 136]    0251: 33 C0                                 xor     ax,ax
+[ 137]    0253: 8B EA                                 mov     bp,dx
+[ 138]    0255: 8A 46 00                              mov     al,[bp]
+[ 139]    0258: 3C 0D                                 cmp     al,0Dh
+[ 140]    025A: 75 DB                                 jne     newLetter
+[ 141]        :                                       
+[ 142]    025C:                                       EOL:
+[ 143]    025C: 41                                    inc     cx
+[ 144]    025D: 42                                    inc     dx
+[ 145]    025E: E8 99 01                              call    readLetterFromFile
+[ 146]    0261: F7 06 5E 05 0F 00                     test    [error],0x0F
+[ 147]    0267: 75 1B                                 jnz     EOF
+[ 148]    0269: 8B EA                                 mov     bp,dx
+[ 149]    026B: 45                                    inc     bp
+[ 150]    026C: 41                                    inc     cx
+[ 151]    026D: C6 46 00 00                           mov     [bp],0
+[ 152]    0271: 88 0E 0A 05                           mov     [aux],cl
+[ 153]    0275: E8 40 00                              call    writeLine
+[ 154]    0278: A1 F9 04                              mov     ax,[iterator]
+[ 155]    027B: 02 06 0A 05                           add     al,[aux]
+[ 156]    027F: A3 F9 04                              mov     [iterator],ax
+[ 157]    0282: EB AC                                 jmp     newLine
+[ 158]        :                                       
+[ 159]    0284:                                       EOF:
+[ 160]    0284: A1 D9 04                              mov     ax,[secondFile]
+[ 161]    0287: A3 D5 04                              mov     [handler],ax
+[ 162]        :                                       
+[ 163]    028A: A1 F9 04                              mov     ax,[iterator]
+[ 164]    028D: A3 08 05                              mov     [16Value],ax
+[ 165]    0290: E8 62 FF                              call    castAscii
+[ 166]        :                                       
+[ 167]    0293: B8 0A 00                              mov     ax,10
+[ 168]    0296: A3 0B 05                              mov     [auxString],ax
+[ 169]    0299: BA FB 04                              lea     dx,16BAscii
+[ 170]    029C: 89 16 06 05                           mov     [Cadena],dx
+[ 171]    02A0: E8 75 01                              call    writeToFile
+[ 172]        :                                       
+[ 173]    02A3: B8 03 00                              mov     ax,3
+[ 174]    02A6: A3 0B 05                              mov     [auxString],ax
+[ 175]    02A9: BA 60 05                              lea     dx,space
+[ 176]    02AC: 89 16 06 05                           mov     [Cadena],dx
+[ 177]    02B0: E8 65 01                              call    writeToFile
+[ 178]    02B3: 5D                                    pop     bp
+[ 179]    02B4: 5A                                    pop     dx
+[ 180]    02B5: 59                                    pop     cx
+[ 181]    02B6: 58                                    pop     ax
+[ 182]    02B7: C3                                    ret
+[ 183]        :                                       
+[ 184]    02B8:                                       writeLine:
+[ 185]    02B8: 50                                    push    ax
+[ 186]    02B9: 52                                    push    dx
+[ 187]        :                                       
+[ 188]    02BA: A1 D9 04                              mov     ax,[secondFile]
+[ 189]    02BD: A3 D5 04                              mov     [handler],ax
+[ 190]        :                                       
+[ 191]    02C0: A1 F9 04                              mov     ax,[iterator]
+[ 192]    02C3: A3 08 05                              mov     [16Value],ax
+[ 193]    02C6: E8 2C FF                              call    castAscii
+[ 194]        :                                       
+[ 195]    02C9: B8 0A 00                              mov     ax,10
+[ 196]    02CC: A3 0B 05                              mov     [auxString],ax
+[ 197]    02CF: BA FB 04                              lea     dx,16BAscii
+[ 198]    02D2: 89 16 06 05                           mov     [Cadena],dx
+[ 199]    02D6: E8 3F 01                              call    writeToFile
+[ 200]        :                                       
+[ 201]    02D9: B8 03 00                              mov     ax,3
+[ 202]    02DC: A3 0B 05                              mov     [auxString],ax
+[ 203]    02DF: BA 60 05                              lea     dx,space
+[ 204]    02E2: 89 16 06 05                           mov     [Cadena],dx
+[ 205]    02E6: E8 2F 01                              call    writeToFile
+[ 206]        :                                       
+[ 207]    02E9: 33 C0                                 xor     ax,ax
+[ 208]    02EB: A0 0A 05                              mov     al,[aux]
+[ 209]    02EE: FE C8                                 dec     al
+[ 210]    02F0: A3 0B 05                              mov     [auxString],ax
+[ 211]    02F3: BA 0D 05                              lea     dx,line
+[ 212]    02F6: 89 16 06 05                           mov     [Cadena],dx
+[ 213]    02FA: E8 1B 01                              call    writeToFile
+[ 214]    02FD: 5A                                    pop     dx
+[ 215]    02FE: 58                                    pop     ax
+[ 216]    02FF: C3                                    ret
+[ 217]        :                                       
+[ 218]    0300:                                       getString:
+[ 219]    0300: 57                                    push    di
+[ 220]    0301: 56                                    push    si
+[ 221]    0302: 51                                    push    cx
+[ 222]    0303: 50                                    push    ax
+[ 223]    0304: 88 0E 0A 05                           mov     [aux],cl
+[ 224]    0308: E3 2E                                 ifKey: jcxz    clearString
+[ 225]    030A: B4 00                                 mov     ah,0
+[ 226]    030C: CD 16                                 int     16H
+[ 227]    030E: 88 04                                 mov     [si],al
+[ 228]    0310: 46                                    inc     si
+[ 229]    0311: 49                                    dec     cx
+[ 230]    0312: 3C 1B                                 cmp     al,1BH
+[ 231]    0314: 75 02                                 jne     lastComp
+[ 232]    0316: EB 6C                                 jmp     endString
+[ 233]    0318: 3C 0D                                 lastComp: cmp     al,0DH
+[ 234]    031A: 74 68                                 je      endString
+[ 235]    031C: 3C 08                                 cmp     al,08H
+[ 236]    031E: 74 06                                 je      erase
+[ 237]    0320: B4 0E                                 mov     ah,0EH
+[ 238]    0322: CD 10                                 int     10H
+[ 239]    0324: EB E2                                 jmp     ifKey
+[ 240]    0326: 4E                                    erase: dec     si
+[ 241]    0327: 4E                                    dec     si
+[ 242]    0328: 41                                    inc     cx
+[ 243]    0329: 41                                    inc     cx
+[ 244]    032A: B4 0E                                 mov     ah,0eH
+[ 245]    032C: CD 10                                 int     10H
+[ 246]    032E: B0 20                                 mov     al,20H
+[ 247]    0330: CD 10                                 int     10H
+[ 248]    0332: B0 08                                 mov     al,08
+[ 249]    0334: CD 10                                 int     10H
+[ 250]    0336: EB D0                                 jmp     ifKey
+[ 251]    0338:                                       clearString:
+[ 252]    0338: 50 53 52 B4 02 B6 03 B2 00 B7 00 CD   GOTOXY  0,3
+                10 5A 5B 58                         
+[ 253]    0348: B9 1E 00                              mov     cx,30
+[ 254]    034B: 89 0E 0B 05                           mov     [auxString],cx
+[ 255]    034F: BE 0D 05                              lea     si,line
+[ 256]    0352: 89 36 06 05                           mov     [Cadena],si
+[ 257]    0356: E8 09 01                              call    removeString
+[ 258]    0359: 50 53 52 B4 02 B6 00 B2 01 B7 00 CD   GOTOXY  1,0
+                10 5A 5B 58                         
+[ 259]    0369: E8 E4 00                              call    eraseLine
+[ 260]    036C: 50 53 52 B4 02 B6 09 B2 00 B7 00 CD   GOTOXY  0,9
+                10 5A 5B 58                         
+[ 261]    037C: BE 0D 05                              lea     si,line
+[ 262]    037F: B9 1E 00                              mov     cx,30
+[ 263]    0382: EB 84                                 jmp     ifKey
+[ 264]    0384: 4E                                    endString: dec     si
+[ 265]    0385: C6 04 00                              mov     [si],0
+[ 266]    0388: B4 0E                                 mov     ah,0eH
+[ 267]    038A: B0 0D                                 mov     al,0dH
+[ 268]    038C: CD 10                                 int     10H
+[ 269]    038E: B0 0A                                 mov     al,0aH
+[ 270]    0390: CD 10                                 int     10H
+[ 271]    0392: 28 0E 0A 05                           sub     [aux],cl
+[ 272]    0396: 58                                    pop     ax
+[ 273]    0397: 59                                    pop     cx
+[ 274]    0398: 5E                                    pop     si
+[ 275]    0399: 5F                                    pop     di
+[ 276]    039A: C3                                    ret
+[ 277]        :                                       
+[ 278]    039B:                                       makeFile:
+[ 279]    039B: 52                                    push    dx
+[ 280]    039C: 51                                    push    cx
+[ 281]    039D: 50                                    push    ax
+[ 282]    039E: B4 3C                                 mov     ah,3Ch
+[ 283]    03A0: CD 21                                 int     21H
+[ 284]    03A2: 72 05                                 jc      errorMakeFile
+[ 285]    03A4: A3 D5 04                              mov     [handler],ax
+[ 286]    03A7: EB 0D                                 jmp     clearRegister
+[ 287]    03A9: A3 5E 05                              errorMakeFile:mov     [error],ax
+[ 288]    03AC: B6 01                                 mov     dh,1
+[ 289]    03AE: B2 00                                 mov     dl,0
+[ 290]    03B0: E8 9D 00                              call    eraseLine
+[ 291]    03B3: E8 BF 00                              call    errorProtocol
+[ 292]    03B6:                                       clearRegister:
+[ 293]    03B6: 58                                    pop     ax
+[ 294]    03B7: 59                                    pop     cx
+[ 295]    03B8: 5A                                    pop     dx
+[ 296]    03B9: C3                                    ret
+[ 297]        :                                       
+[ 298]    03BA:                                       openFile:
+[ 299]    03BA: 52                                    push    dx
+[ 300]    03BB: 51                                    push    cx
+[ 301]    03BC: 50                                    push    ax
+[ 302]    03BD: B9 00 00                              mov     cx,0
+[ 303]    03C0: B4 3D                                 mov     ah,3Dh
+[ 304]    03C2: CD 21                                 int     21H
+[ 305]    03C4: 72 05                                 jc      errorOpenFile
+[ 306]    03C6: A3 D5 04                              mov     [handler],ax
+[ 307]    03C9: EB 0D                                 jmp    finish
+[ 308]        :                                       
+[ 309]    03CB: A3 5E 05                              errorOpenFile:mov     [error],ax
+[ 310]    03CE: B6 01                                 mov     dh,1
+[ 311]    03D0: B2 00                                 mov     dl,0
+[ 312]    03D2: E8 7B 00                              call    eraseLine
+[ 313]    03D5: E8 9D 00                              call    errorProtocol
+[ 314]    03D8:                                       finish:
+[ 315]    03D8: 58                                    pop     ax
+[ 316]    03D9: 59                                    pop     cx
+[ 317]    03DA: 5A                                    pop     dx
+[ 318]    03DB: C3                                    ret
+[ 319]        :                                       
+[ 320]    03DC:                                       closeFile:
+[ 321]    03DC: 52                                    push    dx
+[ 322]    03DD: 53                                    push    bx
+[ 323]    03DE: 50                                    push    ax
+[ 324]    03DF: 8B 1E D5 04                           mov     bx,[handler]
+[ 325]    03E3: B4 3E                                 mov     ah,3eH
+[ 326]    03E5: CD 21                                 int     21H
+[ 327]    03E7: 73 0D                                 jnc     finish1
+[ 328]    03E9: A3 5E 05                              mov     [error],ax
+[ 329]    03EC: B6 14                                 mov     dh,20
+[ 330]    03EE: B2 00                                 mov     dl,0
+[ 331]    03F0: E8 5D 00                              call    eraseLine
+[ 332]    03F3: E8 7F 00                              call    errorProtocol
+[ 333]    03F6: 58                                    finish1:   pop     ax
+[ 334]    03F7: 5B                                    pop     bx
+[ 335]    03F8: 5A                                    pop     dx
+[ 336]    03F9: C3                                    ret
+[ 337]        :                                       
+[ 338]    03FA:                                       readLetterFromFile:
+[ 339]    03FA: 52                                    push    dx
+[ 340]    03FB: 51                                    push    cx
+[ 341]    03FC: 53                                    push    bx
+[ 342]    03FD: 50                                    push    ax
+[ 343]    03FE: B4 3F                                 mov     ah,3FH
+[ 344]    0400: 8B 1E D5 04                           mov     bx,[handler]
+[ 345]    0404: B1 01                                 mov     cl,1
+[ 346]    0406: CD 21                                 int     21H
+[ 347]    0408: 73 06                                 jnc     readSucess
+[ 348]    040A: A3 5E 05                              mov     [error],ax
+[ 349]    040D: E8 65 00                              call    errorProtocol
+[ 350]    0410:                                       readSucess:
+[ 351]    0410: A2 0A 05                              mov     [aux],al
+[ 352]    0413: 58                                    pop     ax
+[ 353]    0414: 5B                                    pop     bx
+[ 354]    0415: 59                                    pop     cx
+[ 355]    0416: 5A                                    pop     dx
+[ 356]    0417: C3                                    ret
+[ 357]        :                                       
+[ 358]    0418:                                       writeToFile:
+[ 359]    0418: 52                                    push    dx
+[ 360]    0419: 51                                    push    cx
+[ 361]    041A: 53                                    push    bx
+[ 362]    041B: 50                                    push    ax
+[ 363]    041C: 33 C0                                 xor     ax,ax
+[ 364]    041E: B4 40                                 mov     ah,40H
+[ 365]    0420: 8B 1E D5 04                           mov     bx,[handler]
+[ 366]    0424: 33 C9                                 xor     cx,cx
+[ 367]    0426: 8B 0E 0B 05                           mov     cx,[auxString]
+[ 368]    042A: 8B 16 06 05                           mov     dx,[Cadena]
+[ 369]    042E: CD 21                                 int     21H
+[ 370]    0430: 73 19                                 jnc     finish2
+[ 371]    0432: A3 5E 05                              mov     [error],ax
+[ 372]    0435: 50 53 52 B4 02 B6 12 B2 14 B7 00 CD   GOTOXY  20,18
+                10 5A 5B 58                         
+[ 373]    0445: E8 08 00                              CALL    eraseLine
+[ 374]    0448: E8 2A 00                              CALL    errorProtocol
+[ 375]        :                                       
+[ 376]    044B: 58                                    finish2:pop     ax
+[ 377]    044C: 5B                                    pop     bx
+[ 378]    044D: 59                                    pop     cx
+[ 379]    044E: 5A                                    pop     dx
+[ 380]    044F: C3                                    ret
+[ 381]        :                                       
+[ 382]    0450:                                       eraseLine:
+[ 383]    0450: 50                                    push    ax
+[ 384]    0451: 53                                    push    bx
+[ 385]    0452: 51                                    push    cx
+[ 386]    0453: B9 50 00                              mov     cx,80
+[ 387]    0456: B0 20                                 mov     al,32
+[ 388]    0458: B7 00                                 mov     bh,0
+[ 389]    045A: B4 0A                                 mov     ah,0aH
+[ 390]    045C: CD 10                                 int     10H
+[ 391]    045E: 59                                    pop     cx
+[ 392]    045F: 5B                                    pop     bx
+[ 393]    0460: 58                                    pop     ax
+[ 394]    0461: C3                                    ret
+[ 395]        :                                       
+[ 396]    0462:                                       removeString:
+[ 397]    0462: 56                                    push    si
+[ 398]    0463: 51                                    push    cx
+[ 399]    0464: 8B 36 06 05                           mov     si,[cadena]
+[ 400]    0468: 8B 0E 0B 05                           mov     cx,[auxString]
+[ 401]    046C: C6 04 00                              long_limiter:mov     [si],0
+[ 402]    046F: 46                                    inc     si
+[ 403]    0470: E2 FA                                 loop    long_limiter
+[ 404]    0472: 59                                    pop     cx
+[ 405]    0473: 5E                                    pop     si
+[ 406]    0474: C3                                    ret
+[ 407]        :                                       
+[ 408]    0475:                                       errorProtocol:
+[ 409]    0475: 57                                    push    di
+[ 410]    0476: 52                                    push    dx
+[ 411]    0477: 51                                    push    cx
+[ 412]    0478: 50                                    push    ax
+[ 413]    0479: A1 5E 05                              mov     ax,[error]
+[ 414]    047C: 48                                    dec     ax
+[ 415]    047D: 75 09                                 jnz     case_2
+[ 416]    047F:                                       case_1:
+[ 417]    047F: 48                                    dec     ax
+[ 418]    0480: 75 06                                 jnz     case_2
+[ 419]    0482: BE 88 06                              lea     si,error_01
+[ 420]    0485: E8 88 02                              call    print_string
+[ 421]    0488:                                       case_2:
+[ 422]    0488: 48                                    dec     ax
+[ 423]    0489: 75 06                                 jnz     case_3
+[ 424]    048B: BE 9A 06                              lea     si,error_02
+[ 425]    048E: E8 7F 02                              call    print_string
+[ 426]    0491:                                       case_3:
+[ 427]    0491: 48                                    dec     ax
+[ 428]    0492: 75 06                                 jnz     case_4
+[ 429]    0494: BE B0 06                              lea     si,error_03
+[ 430]    0497: E8 76 02                              call    print_string
+[ 431]    049A:                                       case_4:
+[ 432]    049A: 48                                    dec     ax
+[ 433]    049B: 75 06                                 jnz     case_5
+[ 434]    049D: BE D6 06                              lea     si,error_04
+[ 435]    04A0: E8 6D 02                              call    print_string
+[ 436]    04A3:                                       case_5:
+[ 437]    04A3: 48                                    dec     ax
+[ 438]    04A4: 75 06                                 jnz     case_6
+[ 439]    04A6: BE EC 06                              lea     si,error_05
+[ 440]    04A9: E8 64 02                              call    print_string
+[ 441]    04AC:                                       case_6:
+[ 442]    04AC: 48                                    dec     ax
+[ 443]    04AD: 75 FD                                 jnz     case_6
+[ 444]    04AF: BE FC 06                              lea     si,error_06
+[ 445]    04B2: E8 5B 02                              call    print_string
+[ 446]        :                                       
+[ 447]    04B5:                                       _data:
+[ 448]        :                                       
+[ 449]    04B5: 00 00 00 00 00 00 00 00 00 00 00 00   nameOutFile     DB 30 DUP (0)
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00                   
+[ 450]    04D3: 0A 00                                 base            DW 10
+[ 451]    04D5: 00 00                                 handler         DW 0
+[ 452]    04D7: 00 00                                 firstFile       DW 0
+[ 453]    04D9: 00 00                                 secondFile      DW 0
+[ 454]    04DB: 00 00 00 00 00 00 00 00 00 00 00 00   nameReadFile    DB 30 DUP (0)
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00                   
+[ 455]    04F9: 00 00                                 iterator        DW 0
+[ 456]    04FB: 30 30 30 30 30 30 30 30 30 30 00      16BAscii        DB 10 DUP ('0'),0
+[ 457]    0506: 00 00                                 Cadena          DW 0
+[ 458]    0508: 00 00                                 16Value         DW 0
+[ 459]    050A: 00                                    aux             DB 0
+[ 460]    050B: 00 00                                 auxString       DW 0
+[ 461]    050D: 00 00 00 00 00 00 00 00 00 00 00 00   line            DB 81 DUP (0)
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00          
+[ 462]    055E: 00 00                                 error           DW 0
+[ 463]    0560: 20 20 20 00                           space           DB "   ",0
+[ 464]    0564: 41 62 72 61 68 61 6D 20 4D 61 67 61   myData_1        DB "Abraham Magana Hernandez - 2022B - D05",0
+                6E 61 20 48 65 72 6E 61 6E 64 65 7A 
+                20 2D 20 32 30 32 32 42 20 2D 20 44 
+                30 35 00                            
+[ 465]    058B: 53 65 6D 69 6E 61 72 69 6F 20 64 65   myData_2        DB "Seminario de Solucion de Problemas de Traductores de Lenguaje 1", 0
+                20 53 6F 6C 75 63 69 6F 6E 20 64 65 
+                20 50 72 6F 62 6C 65 6D 61 73 20 64 
+                65 20 54 72 61 64 75 63 74 6F 72 65 
+                73 20 64 65 20 4C 65 6E 67 75 61 6A 
+                65 20 31 00                         
+[ 466]    05CB: 4E 6F 6D 62 72 65 20 64 65 6C 20 41   getFirstFileName        DB "Nombre del Archivo para Leer (con el .txt): ",0
+                72 63 68 69 76 6F 20 70 61 72 61 20 
+                4C 65 65 72 20 28 63 6F 6E 20 65 6C 
+                20 2E 74 78 74 29 3A 20 00          
+[ 467]    05F8: 4E 6F 6D 62 72 65 20 64 65 6C 20 41   getSecondFileName      DB "Nombre del Archivo para Guardar (con el .txt): ",0
+                72 63 68 69 76 6F 20 70 61 72 61 20 
+                47 75 61 72 64 61 72 20 28 63 6F 6E 
+                20 65 6C 20 2E 74 78 74 29 3A 20 00 
+                                                    
+[ 468]    0628: 45 6C 20 41 72 63 68 69 76 6F 20 64   infoFirst       DB "El Archivo debe tener una linea en blanco al final!",0
+                65 62 65 20 74 65 6E 65 72 20 75 6E 
+                61 20 6C 69 6E 65 61 20 65 6E 20 62 
+                6C 61 6E 63 6F 20 61 6C 20 66 69 6E 
+                61 6C 21 00                         
+[ 469]    065C: 45 6C 20 2E 74 78 74 20 64 65 62 65   infoSecond      DB "El .txt debe estar en la carpeta MyBuilt!",0
+                20 65 73 74 61 72 20 65 6E 20 6C 61 
+                20 63 61 72 70 65 74 61 20 4D 79 42 
+                75 69 6C 74 21 00                   
+[ 470]    0686: 73 00                                 msg4            DB "s",0
+[ 471]        :                                       
+[ 472]    0688: 46 75 6E 63 69 6F 6E 20 6E 6F 20 76   error_01        DB "Funcion no valida",0
+                61 6C 69 64 61 00                   
+[ 473]    069A: 41 72 63 68 69 76 6F 20 6E 6F 20 65   error_02        DB "Archivo no encontrado",0
+                6E 63 6F 6E 74 72 61 64 6F 00       
+[ 474]    06B0: 52 75 74 61 20 6E 6F 20 76 61 6C 69   error_03        DB "Ruta no valida o el archivo no existe",0
+                64 61 20 6F 20 65 6C 20 61 72 63 68 
+                69 76 6F 20 6E 6F 20 65 78 69 73 74 
+                65 00                               
+[ 475]    06D6: 68 61 6E 64 6C 65 72 20 6E 6F 20 64   error_04        DB "handler no disponible",0
+                69 73 70 6F 6E 69 62 6C 65 00       
+[ 476]    06EC: 41 63 63 65 73 6F 20 44 65 6E 65 67   error_05        DB "Acceso Denegado",0
+                61 64 6F 00                         
+[ 477]    06FC: 68 61 6E 64 6C 65 72 20 6E 6F 20 76   error_06        DB "handler no valido",0
+                61 6C 69 64 6F 00                   
+[ 478]        :                                       
+[ 479]    070E: EB 12 50 56 8A 04 3C 00 74 07 46 B4   DEFINE_PRINT_STRING
+                0E CD 10 EB F3 5E 58 C3             
+[ 480]        :                                       
+ 
+===================================================================================================
+ 
+
+
+
+
+===================================================================================================

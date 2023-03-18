@@ -2,7 +2,7 @@ EMU8086 GENERATED LISTING. MACHINE CODE <- SOURCE.
  
 fourth.com -- emu8086 assembler version: 4.08  
  
-[ 07/10/2022  --  06:10:53 p. m. ] 
+[ 26/10/2022  --  10:45:15 a. m. ] 
  
 ===================================================================================================
 [LINE]     LOC: MACHINE CODE                          SOURCE
@@ -11,111 +11,129 @@ fourth.com -- emu8086 assembler version: 4.08
 [   1]        :                                       name "fourth"
 [   2]        :                                       
 [   3]        :                                       org  100h
-[   4]        :                                       	
-[   5]    0100: E9 B6 00                              .data
+[   4]        :                                       
+[   5]    0100:                                       .code
 [   6]        :                                       
-[   7]    0103: 3C 00                                 Base dw 60; Base a Multiplicar
-[   8]    0105: 03 00                                 Exp dw 3; Exponente a Elevar la Base
-[   9]    0107: 00 00                                 aux dw 0
-[  10]        :                                       
-[  11]    0109: 00 00 00 00                           rx dd 0
-[  12]    010D: 00 00                                 rh dw 0
-[  13]    010F: 00 00                                 rl dw 0
+[   7]    0100: B8 00 00                              mov ax, 0
+[   8]    0103: BB 00 00                              mov bx, 0
+[   9]    0106: B9 00 00                              mov cx, 0
+[  10]    0109: BA 00 00                              mov dx, 0
+[  11]        :                                       
+[  12]    010C: B8 03 10                              mov ax, 1003h
+[  13]    010F: CD 10                                 int 10h
 [  14]        :                                       
-[  15]    0111: 53 65 63 63 69 6F 6E 20 44 30 35 20   msg1:   db "Seccion D05 - Abraham Magana Hernandez"
+[  15]    0111: BA 05 07                              mov dx, 0705h
+[  16]    0114: B3 9F                                 mov bl, 10011111b
+[  17]    0116: B9 26 00                              mov cx, msg1_size
+[  18]    0119: B0 01                                 mov al, 01b
+[  19]    011B: BD 79 01                              mov bp, msg1
+[  20]    011E: B4 13                                 mov ah, 13h
+[  21]    0120: CD 10                                 int 10h
+[  22]        :                                       
+[  23]    0122: BA 05 09                              mov dx, 0905h
+[  24]    0125: B9 17 00                              mov cx, msg2_size
+[  25]    0128: BD 9F 01                              mov bp, msg2
+[  26]    012B: CD 10                                 int 10h
+[  27]        :                                       
+[  28]    012D: BA 05 0A                              mov dx, 0A05h
+[  29]    0130: B9 26 00                              mov cx, msg3_size
+[  30]    0133: BD B6 01                              mov bp, msg3
+[  31]    0136: CD 10                                 int 10h
+[  32]        :                                       
+[  33]    0138: BA 05 0B                              mov dx, 0B05h
+[  34]    013B: B9 24 00                              mov cx, msg4_size
+[  35]    013E: BD DC 01                              mov bp, msg4
+[  36]    0141: CD 10                                 int 10h
+[  37]        :                                       
+[  38]    0143: BA 05 0C                              mov dx, 0C05h
+[  39]    0146: B9 21 00                              mov cx, msg5_size
+[  40]    0149: BD 00 02                              mov bp, msg5
+[  41]    014C: CD 10                                 int 10h
+[  42]        :                                       
+[  43]    014E: 83 3E 6D 01 01                        cmp Exp, 1
+[  44]    0153: 7F 07                                 jg operation
+[  45]    0155: 7D 03 E9 F9 00                        jl other
+[  46]        :                                       
+[  47]    015A: CD 20                                 int 20h
+[  48]        :                                       
+[  49]    015C:                                       operation:
+[  50]        :                                       
+[  51]    015C: 8B 0E 6D 01                           mov cx, [Exp]
+[  52]    0160: 49                                    dec cx
+[  53]    0161: A1 6B 01                              mov ax, [Base]
+[  54]    0164: A3 77 01                              mov [rl], ax
+[  55]        :                                       
+[  56]    0167: E8 B7 00                              call mult
+[  57]    016A: C3                                    ret
+[  58]        :                                       
+[  59]    016B:                                       data:
+[  60]        :                                       
+[  61]    016B: 00 00                                 Base dw 0; Base a Multiplicar
+[  62]    016D: 01 00                                 Exp dw 1; Exponente a Elevar la Base
+[  63]    016F: 00 00                                 aux dw 0
+[  64]        :                                       
+[  65]    0171: 00 00 00 00                           rx dd 0
+[  66]    0175: 00 00                                 rh dw 0
+[  67]    0177: 00 00                                 rl dw 0
+[  68]        :                                       
+[  69]    0179: 53 65 63 63 69 6F 6E 20 44 30 35 20   msg1:   db "Seccion D05 - Abraham Magana Hernandez"
                 2D 20 41 62 72 61 68 61 6D 20 4D 61 
                 67 61 6E 61 20 48 65 72 6E 61 6E 64 
                 65 7A                               
-[  16]    0137: 49 6E 74 72 6F 64 75 63 65 20 74 75   msg2:   db "Introduce tus Datos en:"
+[  70]    019F: 49 6E 74 72 6F 64 75 63 65 20 74 75   msg2:   db "Introduce tus Datos en:"
                 73 20 44 61 74 6F 73 20 65 6E 3A    
-[  17]    014E: 42 61 73 65 20 2D 20 20 56 61 72 69   msg3:   db "Base -  Variable de Entrada de 16 bits"
+[  71]    01B6: 42 61 73 65 20 2D 20 20 56 61 72 69   msg3:   db "Base -  Variable de Entrada de 16 bits"
                 61 62 6C 65 20 64 65 20 45 6E 74 72 
                 61 64 61 20 64 65 20 31 36 20 62 69 
                 74 73                               
-[  18]    0174: 45 78 70 20 2D 20 56 61 72 69 61 62   msg4:   db "Exp - Variable de Entrada de 16 bits"
+[  72]    01DC: 45 78 70 20 2D 20 56 61 72 69 61 62   msg4:   db "Exp - Variable de Entrada de 16 bits"
                 6C 65 20 64 65 20 45 6E 74 72 61 64 
                 61 20 64 65 20 31 36 20 62 69 74 73 
                                                     
-[  19]    0198: 52 58 20 2D 20 56 61 72 69 61 62 6C   msg5:   db "RX - Variable de Salida (32 bits)"
+[  73]    0200: 52 58 20 2D 20 56 61 72 69 61 62 6C   msg5:   db "RX - Variable de Salida (32 bits)"
                 65 20 64 65 20 53 61 6C 69 64 61 20 
                 28 33 32 20 62 69 74 73 29          
-[  20]        :                                       
-[  21]    01B9:                                       msg_tail:
-[  22]        :                                       
-[  23]        :                                       msg1_size = msg2 - msg1
-[  24]        :                                       msg2_size = msg3 - msg2
-[  25]        :                                       msg3_size = msg4 - msg3
-[  26]        :                                       msg4_size = msg5 - msg4
-[  27]        :                                       msg5_size = msg_tail - msg5
-[  28]        :                                       
-[  29]    01B9:                                       .code
-[  30]        :                                       
-[  31]    01B9: B8 00 00                              mov ax, 0
-[  32]    01BC: BB 00 00                              mov bx, 0
-[  33]    01BF: B9 00 00                              mov cx, 0
-[  34]    01C2: BA 00 00                              mov dx, 0
-[  35]        :                                       
-[  36]    01C5: B8 03 10                              mov ax, 1003h
-[  37]    01C8: CD 10                                 int 10h
-[  38]        :                                       
-[  39]    01CA: BA 05 07                              mov dx, 0705h
-[  40]    01CD: B3 9F                                 mov bl, 10011111b
-[  41]    01CF: B9 26 00                              mov cx, msg1_size
-[  42]    01D2: B0 01                                 mov al, 01b
-[  43]    01D4: BD 11 01                              mov bp, msg1
-[  44]    01D7: B4 13                                 mov ah, 13h
-[  45]    01D9: CD 10                                 int 10h
-[  46]        :                                       
-[  47]    01DB: BA 05 09                              mov dx, 0905h
-[  48]    01DE: B9 17 00                              mov cx, msg2_size
-[  49]    01E1: BD 37 01                              mov bp, msg2
-[  50]    01E4: CD 10                                 int 10h
-[  51]        :                                       
-[  52]    01E6: BA 05 0A                              mov dx, 0A05h
-[  53]    01E9: B9 26 00                              mov cx, msg3_size
-[  54]    01EC: BD 4E 01                              mov bp, msg3
-[  55]    01EF: CD 10                                 int 10h
-[  56]        :                                       
-[  57]    01F1: BA 05 0B                              mov dx, 0B05h
-[  58]    01F4: B9 24 00                              mov cx, msg4_size
-[  59]    01F7: BD 74 01                              mov bp, msg4
-[  60]    01FA: CD 10                                 int 10h
-[  61]        :                                       
-[  62]    01FC: BA 05 0C                              mov dx, 0C05h
-[  63]    01FF: B9 21 00                              mov cx, msg5_size
-[  64]    0202: BD 98 01                              mov bp, msg5
-[  65]    0205: CD 10                                 int 10h
-[  66]        :                                       
-[  67]    0207:                                       operation:
-[  68]        :                                       
-[  69]    0207: 8B 0E 05 01                           mov cx, [Exp]
-[  70]    020B: 49                                    dec cx
-[  71]    020C: A1 03 01                              mov ax, [Base]
-[  72]    020F: A3 0F 01                              mov [rl], ax
-[  73]        :                                       
-[  74]    0212:                                       mult:
-[  75]        :                                       
-[  76]    0212: A1 0F 01                              mov ax, [rl]
-[  77]    0215: F7 26 03 01                           mul [Base]
-[  78]    0219: A3 0F 01                              mov [rl], ax
-[  79]    021C: 89 16 07 01                           mov [aux], dx
-[  80]        :                                       
-[  81]    0220: A1 0D 01                              mov ax, [rh]
-[  82]    0223: F7 26 03 01                           mul [Base]
-[  83]    0227: A3 0D 01                              mov [rh], ax
+[  74]        :                                       
+[  75]    0221:                                       msg_tail:
+[  76]        :                                       
+[  77]        :                                       msg1_size = msg2 - msg1
+[  78]        :                                       msg2_size = msg3 - msg2
+[  79]        :                                       msg3_size = msg4 - msg3
+[  80]        :                                       msg4_size = msg5 - msg4
+[  81]        :                                       msg5_size = msg_tail - msg5
+[  82]        :                                       
+[  83]    0221:                                       mult:
 [  84]        :                                       
-[  85]    022A: A1 07 01                              mov ax, [aux]
-[  86]    022D: 01 06 0D 01                           add [rh], ax
-[  87]        :                                       
-[  88]    0231: E2 DF                                 loop mult
+[  85]    0221: A1 77 01                              mov ax, [rl]
+[  86]    0224: F7 26 6B 01                           mul [Base]
+[  87]    0228: A3 77 01                              mov [rl], ax
+[  88]    022B: 89 16 6F 01                           mov [aux], dx
 [  89]        :                                       
-[  90]    0233: A1 0D 01                              mov ax, [rh]
-[  91]    0236: A3 0B 01                              mov [rx + 2], ax
-[  92]    0239: A1 0F 01                              mov ax, [rl]
-[  93]    023C: A3 09 01                              mov [rx], ax
-[  94]        :                                       
-[  95]    023F: CD 20                                 int 20h
+[  90]    022F: A1 75 01                              mov ax, [rh]
+[  91]    0232: F7 26 6B 01                           mul [Base]
+[  92]    0236: A3 75 01                              mov [rh], ax
+[  93]        :                                       
+[  94]    0239: A1 6F 01                              mov ax, [aux]
+[  95]    023C: 01 06 75 01                           add [rh], ax
 [  96]        :                                       
+[  97]    0240: E2 DF                                 loop mult
+[  98]    0242: E8 01 00                              call finish
+[  99]        :                                       
+[ 100]    0245: C3                                    ret
+[ 101]        :                                       
+[ 102]    0246:                                       finish:
+[ 103]        :                                       
+[ 104]    0246: A1 75 01                              mov ax, [rh]
+[ 105]    0249: A3 73 01                              mov [rx + 2], ax
+[ 106]    024C: A1 77 01                              mov ax, [rl]
+[ 107]    024F: A3 71 01                              mov [rx], ax
+[ 108]        :                                       
+[ 109]    0252: C3                                    ret
+[ 110]        :                                       
+[ 111]    0253:                                       other:
+[ 112]    0253: C7 06 71 01 01 00                     mov rx, 1
+[ 113]    0259: C3                                    ret
+[ 114]        :                                       
  
 ===================================================================================================
  

@@ -1,0 +1,927 @@
+EMU8086 GENERATED LISTING. MACHINE CODE <- SOURCE.
+ 
+Sixth.com -- emu8086 assembler version: 4.08  
+ 
+[ 26/10/2022  --  10:40:02 p. m. ] 
+ 
+===================================================================================================
+[LINE]     LOC: MACHINE CODE                          SOURCE
+===================================================================================================
+ 
+[   1]        :                                       name    "Sixth"
+[   2]        :                                       org     0100h
+[   3]        :                                       
+[   4]        :                                       ; ---------- Rutina Principal ---------- ;
+[   5]        :                                       
+[   6]    0100:                                       _start:
+[   7]        :                                       
+[   8]    0100: B8 03 10                              mov ax, 1003h
+[   9]    0103: BB 00 00                              mov bx, 0
+[  10]    0106: CD 10                                 int 10h
+[  11]        :                                       
+[  12]    0108: BA 05 07                              mov dx, 0705h
+[  13]    010B: BB 00 00                              mov bx, 0
+[  14]    010E: B3 9F                                 mov bl, 10011111b
+[  15]    0110: B9 2F 00                              mov cx, msg1_size
+[  16]    0113: B0 01                                 mov al, 01b
+[  17]    0115: BD 0D 09                              mov bp, msg1
+[  18]    0118: B4 13                                 mov ah, 13h
+[  19]    011A: CD 10                                 int 10h
+[  20]        :                                       
+[  21]    011C: BA 05 09                              mov dx, 0905h
+[  22]    011F: B9 18 00                              mov cx, msg2_size
+[  23]    0122: BD 3C 09                              mov bp, msg2
+[  24]    0125: B4 13                                 mov ah, 13h
+[  25]    0127: CD 10                                 int 10h
+[  26]        :                                       
+[  27]    0129: BA 05 0B                              mov dx, 0B05h
+[  28]    012C: B9 2E 00                              mov cx, msg3_size
+[  29]    012F: BD 54 09                              mov bp, msg3
+[  30]    0132: B4 13                                 mov ah, 13h
+[  31]    0134: CD 10                                 int 10h
+[  32]        :                                       
+[  33]    0136: BA 05 0C                              mov dx, 0C05h
+[  34]    0139: B9 11 00                              mov cx, msg4_size
+[  35]    013C: BD 82 09                              mov bp, msg4
+[  36]    013F: B4 13                                 mov ah, 13h
+[  37]    0141: CD 10                                 int 10h
+[  38]        :                                       
+[  39]    0143: B8 03 10                              mov ax, 1003h
+[  40]    0146: BB 00 00                              mov bx, 0
+[  41]    0149: CD 10                                 int 10h
+[  42]        :                                       
+[  43]    014B: BE D2 08                              lea si, string
+[  44]    014E: B9 1E 00                              mov cx, 30
+[  45]        :                                       
+[  46]    0151: E8 43 00                              call read_values
+[  47]        :                                       
+[  48]    0154: B3 00                                 mov  bl, 0
+[  49]    0156: 88 1E 07 09                           mov  digit, bl
+[  50]        :                                       
+[  51]    015A: E8 F0 00                              call get_chars
+[  52]    015D: E8 A5 04                              call operation
+[  53]        :                                       
+[  54]    0160:                                       finish:
+[  55]        :                                       
+[  56]    0160: BE 00 00                              mov si, 0
+[  57]    0163: B8 00 00                              mov ax, 0
+[  58]    0166: A2 08 09                              mov helper, al
+[  59]    0169: 8B 1E 0B 09                           mov bx, rx
+[  60]        :                                       
+[  61]    016D: E8 35 03                              call convert
+[  62]    0170: 8A 0E 08 09                           mov cl, helper
+[  63]    0174: 88 0E 0A 09                           mov aux, cl
+[  64]        :                                       
+[  65]    0178: E8 FF 02                              call reverse
+[  66]    017B: BE 00 00                              mov si, 0
+[  67]        :                                       
+[  68]    017E: BA 05 0D                              mov dx, 0D05h
+[  69]    0181: BB 00 00                              mov bx, 0
+[  70]    0184: B3 9F                                 mov bl, 10011111b
+[  71]    0186: B9 12 00                              mov cx, msg5_size
+[  72]    0189: B0 01                                 mov al, 01b
+[  73]    018B: BD 93 09                              mov bp, msg5
+[  74]    018E: B4 13                                 mov ah, 13h
+[  75]    0190: CD 10                                 int 10h
+[  76]        :                                       
+[  77]    0192: E8 B4 02                              call print_out
+[  78]        :                                       
+[  79]    0195: CD 20                                 int 20h
+[  80]        :                                       
+[  81]        :                                       ; ---------- String / Evaluacion de Valores ---------- ;
+[  82]        :                                       
+[  83]    0197:                                       read_values:
+[  84]        :                                       
+[  85]    0197: 49                                    dec     cx
+[  86]    0198: 75 03 E9 AB 02                        jz      aux_return
+[  87]    019D: B4 00                                 mov     ah,0
+[  88]    019F: CD 16                                 int     16h
+[  89]    01A1: 88 04                                 mov     [si],al
+[  90]    01A3: 46                                    inc     si
+[  91]        :                                       
+[  92]    01A4: 3C 0D                                 cmp     al,0dh
+[  93]    01A6: 74 22                                 je      evaluate_values
+[  94]        :                                       
+[  95]    01A8: B4 0E                                 mov     ah,0eH
+[  96]    01AA: CD 10                                 int     10h
+[  97]        :                                       
+[  98]    01AC: 80 3E 0A 09 00                        cmp     aux, 0
+[  99]    01B1: 74 10                                 je      read
+[ 100]    01B3: 3C 2A                                 cmp     al, 42
+[ 101]    01B5: 74 13                                 je      evaluate_values
+[ 102]    01B7: 3C 2B                                 cmp     al, 43
+[ 103]    01B9: 74 0F                                 je      evaluate_values
+[ 104]    01BB: 3C 2D                                 cmp     al, 45
+[ 105]    01BD: 74 0B                                 je      evaluate_values
+[ 106]    01BF: 3C 2F                                 cmp     al,47
+[ 107]    01C1: 74 07                                 je      evaluate_values
+[ 108]        :                                       
+[ 109]    01C3:                                       read:
+[ 110]        :                                       
+[ 111]    01C3: 80 06 0A 09 01                        add     aux,1
+[ 112]    01C8: EB CD                                 jmp     read_values
+[ 113]        :                                       
+[ 114]    01CA:                                       evaluate_values:
+[ 115]        :                                       
+[ 116]    01CA: 80 3E 07 09 00                        cmp digit, 0
+[ 117]    01CF: 74 17                                 je  first_value_case
+[ 118]    01D1: 80 3E 07 09 01                        cmp digit, 1
+[ 119]    01D6: 74 24                                 je  second_value_case
+[ 120]    01D8: 80 3E 07 09 02                        cmp digit, 2
+[ 121]    01DD: 74 35                                 je  third_value_case
+[ 122]    01DF: 80 3E 07 09 03                        cmp digit, 3
+[ 123]    01E4: 74 4B                                 je  fourth_value_case
+[ 124]        :                                       
+[ 125]    01E6: EB AF                                 jmp read_values
+[ 126]        :                                       
+[ 127]    01E8:                                       first_value_case:
+[ 128]    01E8: 8A 1E 0A 09                           mov bl, aux
+[ 129]    01EC: 88 1E 03 09                           mov first_value, bl
+[ 130]    01F0: 80 06 07 09 01                        add digit, 1
+[ 131]    01F5: 80 06 0A 09 01                        add aux, 1
+[ 132]        :                                       
+[ 133]    01FA: EB 9B                                 jmp read_values
+[ 134]        :                                       
+[ 135]    01FC:                                       second_value_case:
+[ 136]    01FC: 8A 1E 0A 09                           mov bl, aux
+[ 137]    0200: 2A 1E 03 09                           sub bl, first_value
+[ 138]    0204: 88 1E 04 09                           mov second_value, bl
+[ 139]    0208: 80 06 07 09 01                        add digit, 1
+[ 140]    020D: 80 06 0A 09 01                        add aux, 1
+[ 141]        :                                       
+[ 142]    0212: EB 83                                 jmp read_values
+[ 143]        :                                       
+[ 144]    0214:                                       third_value_case:
+[ 145]    0214: 8A 1E 0A 09                           mov bl, aux
+[ 146]    0218: 2A 1E 03 09                           sub bl, first_value
+[ 147]    021C: 2A 1E 04 09                           sub bl, second_value
+[ 148]    0220: 88 1E 05 09                           mov third_value, bl
+[ 149]    0224: 80 06 07 09 01                        add digit, 1
+[ 150]    0229: 80 06 0A 09 01                        add aux, 1
+[ 151]        :                                       
+[ 152]    022E: E9 66 FF                              jmp read_values
+[ 153]        :                                       
+[ 154]    0231:                                       fourth_value_case:
+[ 155]    0231: 8A 1E 0A 09                           mov bl, aux
+[ 156]    0235: 2A 1E 03 09                           sub bl, first_value
+[ 157]    0239: 2A 1E 04 09                           sub bl, second_value
+[ 158]    023D: 2A 1E 05 09                           sub bl, third_value
+[ 159]    0241: 88 1E 06 09                           mov fourth_value, bl
+[ 160]    0245: 80 06 0A 09 01                        add aux, 1
+[ 161]        :                                       
+[ 162]    024A: E9 FB 01                              jmp aux_return
+[ 163]        :                                       
+[ 164]    024D:                                       get_chars:
+[ 165]        :                                       
+[ 166]    024D: 80 3E 07 09 00                        cmp digit,0
+[ 167]    0252: 74 1B                                 je  first_string
+[ 168]    0254: 80 3E 07 09 01                        cmp digit,1
+[ 169]    0259: 74 58                                 je  second_string
+[ 170]    025B: 80 3E 07 09 02                        cmp digit,2
+[ 171]    0260: 75 03 E9 84 00                        je  third_string
+[ 172]    0265: 80 3E 07 09 03                        cmp digit,3
+[ 173]    026A: 75 03 E9 B0 00                        je  fourth_string
+[ 174]        :                                       
+[ 175]    026F:                                       first_string:
+[ 176]        :                                       
+[ 177]    026F: 80 3E 03 09 05                        cmp first_value,5
+[ 178]    0274: 8A 1E D2 08                           mov bl,string[0]
+[ 179]    0278: 88 1E 08 09                           mov helper,bl
+[ 180]    027C: BA 01 00                              mov dx,1
+[ 181]    027F: 8B F2                                 mov si,dx
+[ 182]    0281: 75 03 E9 3B 02                        je  fourth_decimal
+[ 183]        :                                       
+[ 184]    0286: BA 01 00                              mov dx,1
+[ 185]    0289: 8B F2                                 mov si,dx
+[ 186]    028B: 80 3E 03 09 04                        cmp first_value,4
+[ 187]    0290: 75 03 E9 74 02                        je  third_decimal
+[ 188]        :                                       
+[ 189]    0295: BA 01 00                              mov dx,1
+[ 190]    0298: 8B F2                                 mov si,dx
+[ 191]    029A: 80 3E 03 09 03                        cmp first_value,3
+[ 192]    029F: 75 03 E9 B1 02                        je  second_decimal
+[ 193]        :                                       
+[ 194]    02A4: BA 01 00                              mov dx,1
+[ 195]    02A7: 8B F2                                 mov si,dx
+[ 196]    02A9: 80 3E 03 09 02                        cmp first_value,2
+[ 197]    02AE: 75 03 E9 EE 02                        je  first_decimal
+[ 198]        :                                       
+[ 199]    02B3:                                       second_string:
+[ 200]        :                                       
+[ 201]    02B3: 83 C6 01                              add si,1
+[ 202]    02B6: 8A 9C D2 08                           mov bl,string[si]
+[ 203]    02BA: 88 1E 08 09                           mov helper,bl
+[ 204]    02BE: 83 C6 01                              add si,1
+[ 205]        :                                       
+[ 206]    02C1: 80 3E 04 09 05                        cmp second_value,5
+[ 207]    02C6: 75 03 E9 F6 01                        je  fourth_decimal
+[ 208]    02CB: 80 3E 04 09 04                        cmp second_value,4
+[ 209]    02D0: 75 03 E9 34 02                        je  third_decimal
+[ 210]    02D5: 80 3E 04 09 03                        cmp second_value,3
+[ 211]    02DA: 75 03 E9 76 02                        je  second_decimal
+[ 212]    02DF: 80 3E 04 09 02                        cmp second_value,2
+[ 213]    02E4: 75 03 E9 B8 02                        je  first_decimal
+[ 214]        :                                       
+[ 215]    02E9:                                       third_string:
+[ 216]        :                                       
+[ 217]    02E9: 83 C6 01                              add si,1
+[ 218]    02EC: 8A 9C D2 08                           mov bl,string[si]
+[ 219]    02F0: 88 1E 08 09                           mov helper,bl
+[ 220]    02F4: 83 C6 01                              add si,1
+[ 221]    02F7: 80 3E 05 09 05                        cmp third_value,5
+[ 222]    02FC: 75 03 E9 C0 01                        je  fourth_decimal
+[ 223]    0301: 80 3E 05 09 04                        cmp third_value,4
+[ 224]    0306: 75 03 E9 FE 01                        je  third_decimal
+[ 225]    030B: 80 3E 05 09 03                        cmp third_value,3
+[ 226]    0310: 75 03 E9 40 02                        je  second_decimal
+[ 227]    0315: 80 3E 05 09 02                        cmp third_value,2
+[ 228]    031A: 75 03 E9 82 02                        je  first_decimal
+[ 229]        :                                       
+[ 230]    031F:                                       fourth_string:
+[ 231]        :                                       
+[ 232]    031F: 83 C6 01                              add si,1
+[ 233]    0322: 8A 9C D2 08                           mov bl,string[si]
+[ 234]    0326: 88 1E 08 09                           mov helper,bl
+[ 235]    032A: 83 C6 01                              add si,1
+[ 236]    032D: 80 3E 06 09 05                        cmp fourth_value,5
+[ 237]    0332: 75 03 E9 8A 01                        je  fourth_decimal
+[ 238]    0337: 80 3E 06 09 04                        cmp fourth_value,4
+[ 239]    033C: 75 03 E9 C8 01                        je  third_decimal
+[ 240]    0341: 80 3E 06 09 03                        cmp fourth_value,3
+[ 241]    0346: 75 03 E9 0A 02                        je  second_decimal
+[ 242]    034B: 80 3E 06 09 02                        cmp fourth_value,2
+[ 243]    0350: 75 03 E9 4C 02                        je  first_decimal
+[ 244]        :                                       
+[ 245]        :                                       ; ---------- Signos ----------- ;
+[ 246]        :                                       
+[ 247]    0355:                                       only_negatives:
+[ 248]        :                                       
+[ 249]    0355: 80 3E 03 09 2B                        cmp  first_value,43
+[ 250]    035A: 74 07                                 je   positive_number
+[ 251]    035C: 80 3E 03 09 2D                        cmp  first_value,45
+[ 252]    0361: 74 0E                                 je   negative_number
+[ 253]        :                                       
+[ 254]    0363:                                       positive_number:
+[ 255]        :                                       
+[ 256]    0363: 80 3E 04 09 2B                        cmp second_value,43
+[ 257]    0368: 74 7C                                 je  push_first
+[ 258]    036A: 80 3E 04 09 2D                        cmp second_value,45
+[ 259]    036F: 74 13                                 je  remove_first
+[ 260]        :                                       
+[ 261]    0371:                                       negative_number:
+[ 262]        :                                       
+[ 263]    0371: 80 06 09 09 01                        add flag,1
+[ 264]    0376: 80 3E 04 09 2B                        cmp second_value,43
+[ 265]    037B: 74 07                                 je  remove_first
+[ 266]    037D: 80 3E 04 09 2D                        cmp second_value,45
+[ 267]    0382: 74 62                                 je  push_first
+[ 268]        :                                       
+[ 269]    0384:                                       remove_first:
+[ 270]        :                                       
+[ 271]    0384: A1 FB 08                              mov ax,first_number
+[ 272]    0387: A3 0B 09                              mov rx,ax
+[ 273]    038A: A1 FD 08                              mov ax,second_number
+[ 274]    038D: 29 06 0B 09                           sub rx,ax
+[ 275]    0391: 80 3E 09 09 00                        cmp flag,0
+[ 276]    0396: 75 0E                                 jne end_first_remove
+[ 277]    0398: 80 3E 05 09 2B                        cmp third_value,43
+[ 278]    039D: 74 77                                 je  push_second
+[ 279]    039F: 80 3E 05 09 2D                        cmp third_value,45
+[ 280]    03A4: 74 0E                                 je  remove_second
+[ 281]        :                                       
+[ 282]    03A6:                                       end_first_remove:
+[ 283]    03A6: 80 3E 05 09 2B                        cmp third_value,43
+[ 284]    03AB: 74 07                                 je  remove_second
+[ 285]    03AD: 80 3E 05 09 2D                        cmp third_value,45
+[ 286]    03B2: 74 62                                 je  push_second
+[ 287]        :                                       
+[ 288]    03B4:                                       remove_second:
+[ 289]        :                                       
+[ 290]    03B4: A1 FF 08                              mov ax,third_number
+[ 291]    03B7: 29 06 0B 09                           sub rx,ax
+[ 292]    03BB: 80 3E 09 09 00                        cmp flag,0
+[ 293]    03C0: 75 0E                                 jne end_second_remove
+[ 294]    03C2: 80 3E 06 09 2B                        cmp fourth_value, 43
+[ 295]    03C7: 74 77                                 je  push_last
+[ 296]    03C9: 80 3E 06 09 2D                        cmp fourth_value, 45
+[ 297]    03CE: 74 0E                                 je  remove_last
+[ 298]        :                                       
+[ 299]    03D0:                                       end_second_remove:
+[ 300]    03D0: 80 3E 06 09 2B                        cmp fourth_value,43
+[ 301]    03D5: 74 07                                 je  remove_last
+[ 302]    03D7: 80 3E 06 09 2D                        cmp fourth_value,45
+[ 303]    03DC: 74 62                                 je  push_last
+[ 304]        :                                       
+[ 305]    03DE:                                       remove_last:
+[ 306]    03DE: A1 01 09                              mov ax,fourth_number
+[ 307]    03E1: 29 06 0B 09                           sub rx,ax
+[ 308]    03E5: C3                                    ret
+[ 309]        :                                       
+[ 310]    03E6:                                       push_first:
+[ 311]        :                                       
+[ 312]    03E6: A1 FB 08                              mov ax,first_number
+[ 313]    03E9: A3 0B 09                              mov rx,ax
+[ 314]    03EC: A1 FD 08                              mov ax,second_number
+[ 315]    03EF: 01 06 0B 09                           add rx,ax
+[ 316]    03F3: 80 3E 09 09 00                        cmp flag,0
+[ 317]    03F8: 75 0E                                 jne end_push_first
+[ 318]    03FA: 80 3E 05 09 2B                        cmp third_value,43
+[ 319]    03FF: 74 15                                 je  push_second
+[ 320]    0401: 80 3E 05 09 2D                        cmp third_value,45
+[ 321]    0406: 74 AC                                 je  remove_second
+[ 322]        :                                       
+[ 323]    0408:                                       end_push_first:
+[ 324]    0408: 80 3E 05 09 2B                        cmp third_value,43
+[ 325]    040D: 74 A5                                 je  remove_second
+[ 326]    040F: 80 3E 05 09 2D                        cmp third_value,45
+[ 327]    0414: 74 00                                 je  push_second
+[ 328]        :                                       
+[ 329]    0416:                                       push_second:
+[ 330]        :                                       
+[ 331]    0416: A1 FF 08                              mov ax,third_number
+[ 332]    0419: 01 06 0B 09                           add rx,ax
+[ 333]    041D: 80 3E 09 09 00                        cmp flag,0
+[ 334]    0422: 75 0E                                 jne end_push_second
+[ 335]    0424: 80 3E 06 09 2B                        cmp fourth_value,43
+[ 336]    0429: 74 15                                 je  push_last
+[ 337]    042B: 80 3E 06 09 2D                        cmp fourth_value,45
+[ 338]    0430: 74 AC                                 je  remove_last
+[ 339]        :                                       
+[ 340]    0432:                                       end_push_second:
+[ 341]    0432: 80 3E 06 09 2B                        cmp fourth_value,43
+[ 342]    0437: 74 A5                                 je  remove_last
+[ 343]    0439: 80 3E 06 09 2D                        cmp fourth_value,45
+[ 344]    043E: 74 00                                 je  push_last
+[ 345]        :                                       
+[ 346]    0440:                                       push_last:
+[ 347]        :                                       
+[ 348]    0440: A1 01 09                              mov ax,fourth_number
+[ 349]    0443: 01 06 0B 09                           add rx,ax
+[ 350]    0447: C3                                    ret
+[ 351]        :                                       
+[ 352]        :                                       ; ---------- Helpers ---------- ;
+[ 353]        :                                       
+[ 354]    0448:                                       aux_return:
+[ 355]    0448: C3                                    ret
+[ 356]        :                                       
+[ 357]    0449:                                       print_out:
+[ 358]        :                                       
+[ 359]    0449: B7 00                                 mov bh, 0
+[ 360]    044B: B6 0D                                 mov dh, 13
+[ 361]    044D: 80 06 F0 08 01                        add row, 1
+[ 362]    0452: 8A 16 F0 08                           mov dl, row
+[ 363]    0456: B4 02                                 mov ah, 02h
+[ 364]    0458: CD 10                                 int 10h
+[ 365]        :                                       
+[ 366]    045A: 80 2E 0A 09 01                        sub aux, 1
+[ 367]    045F: B7 00                                 mov bh, 0	
+[ 368]    0461: 8A 84 F6 08                           mov al, print_result[si]
+[ 369]    0465: 83 C6 01                              add si, 1
+[ 370]    0468: 04 30                                 add al, 48	
+[ 371]    046A: B9 01 00                              mov cx, 1
+[ 372]    046D: B4 0A                                 mov ah, 0Ah
+[ 373]    046F: CD 10                                 int 10h
+[ 374]        :                                       
+[ 375]    0471: 80 3E 0A 09 00                        cmp aux,0
+[ 376]    0476: 74 D0                                 je  aux_return
+[ 377]    0478: EB CF                                 jmp print_out
+[ 378]        :                                       
+[ 379]    047A:                                       reverse:
+[ 380]        :                                       
+[ 381]    047A: 80 2E 08 09 01                        sub helper, 1
+[ 382]    047F: B8 00 00                              mov ax, 0
+[ 383]    0482: A0 08 09                              mov al, helper
+[ 384]    0485: 8B F0                                 mov si, ax
+[ 385]    0487: 8A 84 F1 08                           mov al, string_out[si]
+[ 386]    048B: 8A 1E 09 09                           mov bl, flag
+[ 387]    048F: B7 00                                 mov bh, 0
+[ 388]    0491: 8B F3                                 mov si, bx
+[ 389]    0493: 80 06 09 09 01                        add flag, 1
+[ 390]    0498: 88 84 F6 08                           mov print_result[si], al
+[ 391]    049C: 80 3E 08 09 00                        cmp helper, 0
+[ 392]        :                                       
+[ 393]    04A1: 74 A5                                 je  aux_return
+[ 394]    04A3: EB D5                                 jmp reverse
+[ 395]        :                                       
+[ 396]    04A5:                                       convert:
+[ 397]        :                                       
+[ 398]    04A5: 8B C3                                 mov ax, bx
+[ 399]    04A7: B3 0A                                 mov bl, 10
+[ 400]    04A9: F6 F3                                 div bl
+[ 401]    04AB: 88 A4 F1 08                           mov string_out[si], ah
+[ 402]    04AF: 83 C6 01                              add si, 1
+[ 403]    04B2: 80 06 08 09 01                        add helper, 1
+[ 404]    04B7: 8A D8                                 mov bl, al
+[ 405]    04B9: B7 00                                 mov bh, 0
+[ 406]    04BB: 3C 00                                 cmp al, 0
+[ 407]    04BD: 74 89                                 je aux_return
+[ 408]    04BF: EB E4                                 jmp convert
+[ 409]        :                                       
+[ 410]    04C1:                                       fourth_decimal:
+[ 411]        :                                       
+[ 412]    04C1: B8 00 00                              mov ax,0
+[ 413]    04C4: BB E8 03                              mov bx,1000
+[ 414]    04C7: 8A 84 D2 08                           mov al,string[si]
+[ 415]    04CB: 2C 30                                 sub al,48
+[ 416]    04CD: F7 E3                                 mul bx
+[ 417]        :                                       
+[ 418]    04CF: 80 3E 07 09 00                        cmp digit,0
+[ 419]    04D4: 74 15                                 je  last_case_first
+[ 420]    04D6: 80 3E 07 09 01                        cmp digit,1
+[ 421]    04DB: 74 16                                 je  last_case_second
+[ 422]    04DD: 80 3E 07 09 02                        cmp digit,2
+[ 423]    04E2: 74 17                                 je  last_case_third
+[ 424]    04E4: 80 3E 07 09 03                        cmp digit,3
+[ 425]    04E9: 74 18                                 je  last_case_fourth
+[ 426]        :                                       
+[ 427]    04EB:                                       last_case_first:
+[ 428]    04EB: A3 FB 08                              mov first_number, ax
+[ 429]    04EE: 83 C6 01                              add si, 1
+[ 430]    04F1: EB 16                                 jmp third_decimal
+[ 431]        :                                       
+[ 432]    04F3:                                       last_case_second:
+[ 433]    04F3: A3 FD 08                              mov second_number, ax
+[ 434]    04F6: 83 C6 01                              add si, 1
+[ 435]    04F9: EB 0E                                 jmp third_decimal
+[ 436]        :                                       
+[ 437]    04FB:                                       last_case_third:
+[ 438]    04FB: A3 FF 08                              mov third_number,ax
+[ 439]    04FE: 83 C6 01                              add si,1
+[ 440]    0501: EB 06                                 jmp third_decimal
+[ 441]        :                                       
+[ 442]    0503:                                       last_case_fourth:
+[ 443]    0503: A3 01 09                              mov fourth_number,ax
+[ 444]    0506: 83 C6 01                              add si,1
+[ 445]        :                                       
+[ 446]    0509:                                       third_decimal:
+[ 447]        :                                       
+[ 448]    0509: B8 00 00                              mov ax, 0
+[ 449]    050C: BB 64 00                              mov bx, 100
+[ 450]    050F: 8A 84 D2 08                           mov al, string[si]
+[ 451]    0513: 2C 30                                 sub al, 48
+[ 452]    0515: F7 E3                                 mul bx
+[ 453]        :                                       
+[ 454]    0517: 80 3E 07 09 00                        cmp digit, 0
+[ 455]    051C: 74 15                                 je  third_case_first
+[ 456]    051E: 80 3E 07 09 01                        cmp digit, 1
+[ 457]    0523: 74 17                                 je  third_case_second
+[ 458]    0525: 80 3E 07 09 02                        cmp digit, 2
+[ 459]    052A: 74 19                                 je  third_case_third
+[ 460]    052C: 80 3E 07 09 03                        cmp digit, 3
+[ 461]    0531: 74 1B                                 je  third_case_last
+[ 462]        :                                       
+[ 463]    0533:                                       third_case_first:
+[ 464]    0533: 01 06 FB 08                           add first_number,ax
+[ 465]    0537: 83 C6 01                              add si,1
+[ 466]    053A: EB 19                                 jmp second_decimal
+[ 467]    053C:                                       third_case_second:
+[ 468]    053C: 01 06 FD 08                           add second_number,ax
+[ 469]    0540: 83 C6 01                              add si,1
+[ 470]    0543: EB 10                                 jmp second_decimal
+[ 471]    0545:                                       third_case_third:
+[ 472]    0545: 01 06 FF 08                           add third_number,ax
+[ 473]    0549: 83 C6 01                              add si,1
+[ 474]    054C: EB 07                                 jmp second_decimal
+[ 475]    054E:                                       third_case_last:
+[ 476]    054E: 01 06 01 09                           add fourth_number,ax
+[ 477]    0552: 83 C6 01                              add si,1
+[ 478]        :                                       
+[ 479]    0555:                                       second_decimal:
+[ 480]        :                                       
+[ 481]    0555: B8 00 00                              mov ax, 0
+[ 482]    0558: BB 0A 00                              mov bx, 10
+[ 483]    055B: 8A 84 D2 08                           mov al, string[si]
+[ 484]    055F: 2C 30                                 sub al, 48
+[ 485]    0561: F7 E3                                 mul bx
+[ 486]        :                                       
+[ 487]    0563: 80 3E 07 09 00                        cmp digit, 0
+[ 488]    0568: 74 15                                 je  second_case_first
+[ 489]    056A: 80 3E 07 09 01                        cmp digit, 1
+[ 490]    056F: 74 17                                 je  second_case_second
+[ 491]    0571: 80 3E 07 09 02                        cmp digit, 2
+[ 492]    0576: 74 19                                 je  second_case_third
+[ 493]    0578: 80 3E 07 09 03                        cmp digit, 3
+[ 494]    057D: 74 1B                                 je  second_case_last
+[ 495]        :                                       
+[ 496]    057F:                                       second_case_first:
+[ 497]    057F: 01 06 FB 08                           add first_number,ax
+[ 498]    0583: 83 C6 01                              add si,1
+[ 499]    0586: EB 19                                 jmp first_decimal
+[ 500]    0588:                                       second_case_second:
+[ 501]    0588: 01 06 FD 08                           add second_number,ax
+[ 502]    058C: 83 C6 01                              add si,1
+[ 503]    058F: EB 10                                 jmp first_decimal
+[ 504]    0591:                                       second_case_third:
+[ 505]    0591: 01 06 FF 08                           add third_number,ax
+[ 506]    0595: 83 C6 01                              add si,1
+[ 507]    0598: EB 07                                 jmp first_decimal
+[ 508]    059A:                                       second_case_last:
+[ 509]    059A: 01 06 01 09                           add fourth_number,ax
+[ 510]    059E: 83 C6 01                              add si,1
+[ 511]        :                                       
+[ 512]    05A1:                                       first_decimal:
+[ 513]    05A1: B8 00 00                              mov ax,0
+[ 514]    05A4: 8A 84 D2 08                           mov al,string[si]
+[ 515]    05A8: 2C 30                                 sub al,48
+[ 516]        :                                       
+[ 517]    05AA: 80 3E 07 09 00                        cmp digit,0
+[ 518]    05AF: 74 15                                 je  first_case_first
+[ 519]    05B1: 80 3E 07 09 01                        cmp digit,1
+[ 520]    05B6: 74 1C                                 je  first_case_second
+[ 521]    05B8: 80 3E 07 09 02                        cmp digit,2
+[ 522]    05BD: 74 23                                 je  first_case_third
+[ 523]    05BF: 80 3E 07 09 03                        cmp digit,3
+[ 524]    05C4: 74 2A                                 je  first_case_last
+[ 525]        :                                       
+[ 526]    05C6:                                       first_case_first:
+[ 527]    05C6: 01 06 FB 08                           add first_number, ax
+[ 528]    05CA: 8A 1E 08 09                           mov bl, helper
+[ 529]    05CE: 88 1E 03 09                           mov first_value, bl
+[ 530]    05D2: EB 29                                 jmp end_cases
+[ 531]        :                                       
+[ 532]    05D4:                                       first_case_second:
+[ 533]    05D4: 01 06 FD 08                           add second_number, ax
+[ 534]    05D8: 8A 1E 08 09                           mov bl, helper
+[ 535]    05DC: 88 1E 04 09                           mov second_value, bl
+[ 536]    05E0: EB 1B                                 jmp end_cases
+[ 537]        :                                       
+[ 538]    05E2:                                       first_case_third:
+[ 539]    05E2: 01 06 FF 08                           add third_number, ax
+[ 540]    05E6: 8A 1E 08 09                           mov bl, helper
+[ 541]    05EA: 88 1E 05 09                           mov third_value, bl
+[ 542]    05EE: EB 0D                                 jmp end_cases
+[ 543]        :                                       
+[ 544]    05F0:                                       first_case_last:
+[ 545]    05F0: 01 06 01 09                           add fourth_number, ax
+[ 546]    05F4: 8A 1E 08 09                           mov bl, helper
+[ 547]    05F8: 88 1E 06 09                           mov fourth_value, bl
+[ 548]    05FC: C3                                    ret
+[ 549]        :                                       
+[ 550]    05FD:                                       end_cases:
+[ 551]    05FD: 80 06 07 09 01                        add digit,1
+[ 552]    0602: E9 48 FC                              jmp get_chars
+[ 553]        :                                       
+[ 554]        :                                       ; ---------- Comparando los primeros casos con Jerarquia ---------- ;
+[ 555]        :                                       
+[ 556]    0605:                                       operation:
+[ 557]        :                                       
+[ 558]    0605: 80 3E 04 09 2A                        cmp second_value,42
+[ 559]    060A: 74 2F                                 je  first_mult
+[ 560]    060C: 80 3E 04 09 2F                        cmp second_value,47
+[ 561]    0611: 75 03 E9 9C 00                        je  first_div
+[ 562]        :                                       
+[ 563]    0616: 80 3E 05 09 2A                        cmp third_value,42
+[ 564]    061B: 74 3F                                 je  second_mult
+[ 565]    061D: 80 3E 05 09 2F                        cmp third_value,47
+[ 566]    0622: 75 03 E9 A9 00                        je  second_div
+[ 567]        :                                       
+[ 568]    0627: 80 3E 06 09 2A                        cmp fourth_value,42
+[ 569]    062C: 74 63                                 je  third_mult
+[ 570]    062E: 80 3E 06 09 2F                        cmp fourth_value,47
+[ 571]    0633: 75 03 E9 CD 00                        je  third_div
+[ 572]        :                                       
+[ 573]    0638: E9 15 02                              jmp only_adds
+[ 574]        :                                       
+[ 575]    063B:                                       first_mult:
+[ 576]        :                                       
+[ 577]    063B: A1 FB 08                              mov ax,first_number
+[ 578]    063E: 8B 1E FD 08                           mov bx,second_number
+[ 579]    0642: F7 E3                                 mul bx
+[ 580]    0644: A3 0B 09                              mov rx,ax
+[ 581]    0647: 80 3E 05 09 2A                        cmp third_value,42
+[ 582]    064C: 75 03 E9 D5 00                        je  cmp_first_mult
+[ 583]    0651: 80 3E 05 09 2F                        cmp third_value,47
+[ 584]    0656: 75 03 E9 03 01                        je  cmp_first_div
+[ 585]    065B: C3                                    ret
+[ 586]        :                                       
+[ 587]    065C:                                       second_mult:
+[ 588]        :                                       
+[ 589]    065C: A1 FD 08                              mov ax,second_number
+[ 590]    065F: 8B 1E FF 08                           mov bx,third_number
+[ 591]    0663: F7 E3                                 mul bx
+[ 592]    0665: A3 0B 09                              mov rx,ax
+[ 593]    0668: 80 3E 06 09 2A                        cmp fourth_value,42
+[ 594]    066D: 75 03 E9 6E 01                        je  cmp_second_mult
+[ 595]    0672: 80 3E 06 09 2F                        cmp fourth_value,47
+[ 596]    0677: 75 03 E9 7F 01                        je  cmp_second_div
+[ 597]    067C: 80 3E 06 09 2B                        cmp fourth_value,43
+[ 598]    0681: 75 03 E9 18 01                        je  cmp_second_add
+[ 599]    0686: 80 3E 06 09 2D                        cmp fourth_value,45
+[ 600]    068B: 75 03 E9 33 01                        je  cmp_second_sub
+[ 601]    0690: C3                                    ret
+[ 602]        :                                       
+[ 603]    0691:                                       third_mult:
+[ 604]        :                                       
+[ 605]    0691: A1 FF 08                              mov ax,third_number
+[ 606]    0694: 8B 1E 01 09                           mov bx,fourth_number
+[ 607]    0698: F7 E3                                 mul bx
+[ 608]    069A: A3 0B 09                              mov rx,ax
+[ 609]    069D: 80 3E 03 09 2B                        cmp first_value,43
+[ 610]    06A2: 75 03 E9 6F 01                        je  third_helper_add
+[ 611]    06A7: 80 3E 03 09 2D                        cmp first_value,45
+[ 612]    06AC: 75 03 E9 7A 01                        je  third_helper_sub
+[ 613]    06B1: C3                                    ret
+[ 614]        :                                       
+[ 615]    06B2:                                       first_div:
+[ 616]        :                                       
+[ 617]    06B2: A1 FB 08                              mov ax,first_number
+[ 618]    06B5: 8B 1E FD 08                           mov bx,second_number
+[ 619]    06B9: F7 F3                                 div bx
+[ 620]    06BB: A3 0B 09                              mov rx,ax
+[ 621]    06BE: 80 3E 05 09 2A                        cmp third_value,42
+[ 622]    06C3: 74 61                                 je  cmp_first_mult
+[ 623]    06C5: 80 3E 05 09 2F                        cmp third_value,47
+[ 624]    06CA: 75 03 E9 8F 00                        je  cmp_first_div
+[ 625]    06CF: C3                                    ret
+[ 626]        :                                       
+[ 627]    06D0:                                       second_div:
+[ 628]        :                                       
+[ 629]    06D0: A1 FD 08                              mov ax,second_number
+[ 630]    06D3: 8B 1E FF 08                           mov bx,third_number
+[ 631]    06D7: F7 F3                                 div bx
+[ 632]    06D9: A3 0B 09                              mov rx,ax
+[ 633]    06DC: 80 3E 06 09 2A                        cmp fourth_value,42
+[ 634]    06E1: 75 03 E9 FA 00                        je  cmp_second_mult
+[ 635]    06E6: 80 3E 06 09 2F                        cmp fourth_value,47
+[ 636]    06EB: 75 03 E9 0B 01                        je  cmp_second_div
+[ 637]    06F0: 80 3E 06 09 2B                        cmp fourth_value,43
+[ 638]    06F5: 75 03 E9 A4 00                        je  cmp_second_add
+[ 639]    06FA: 80 3E 06 09 2D                        cmp fourth_value,45
+[ 640]    06FF: 75 03 E9 BF 00                        je  cmp_second_sub
+[ 641]    0704: C3                                    ret
+[ 642]        :                                       
+[ 643]    0705:                                       third_div:
+[ 644]        :                                       
+[ 645]    0705: A1 FF 08                              mov ax,third_number
+[ 646]    0708: 8B 1E 01 09                           mov bx,fourth_number
+[ 647]    070C: F7 F3                                 div bx
+[ 648]    070E: A3 0B 09                              mov rx,ax
+[ 649]    0711: 80 3E 03 09 2B                        cmp first_value,43
+[ 650]    0716: 75 03 E9 FB 00                        je  third_helper_add
+[ 651]    071B: 80 3E 03 09 2D                        cmp first_value,45
+[ 652]    0720: 75 03 E9 06 01                        je  third_helper_sub
+[ 653]    0725: C3                                    ret
+[ 654]        :                                       
+[ 655]        :                                       ; ---------- Resto de Operaciones ---------- ;
+[ 656]        :                                       
+[ 657]    0726:                                       cmp_first_mult: ; Comparación de Multiplicaciones
+[ 658]        :                                       
+[ 659]    0726: A1 0B 09                              mov ax,rx
+[ 660]    0729: 8B 1E FF 08                           mov bx,third_number
+[ 661]    072D: F7 E3                                 mul bx
+[ 662]    072F: A3 0B 09                              mov rx,ax
+[ 663]    0732: 80 3E 06 09 2A                        cmp fourth_value,42
+[ 664]    0737: 74 16                                 je  cmp_finish_mult
+[ 665]    0739: 80 3E 06 09 2F                        cmp fourth_value,47
+[ 666]    073E: 74 47                                 je  cmp_finish_div
+[ 667]    0740: 80 3E 06 09 2B                        cmp fourth_value,43
+[ 668]    0745: 74 4F                                 je  cmp_first_add
+[ 669]    0747: 80 3E 06 09 2D                        cmp fourth_value,45
+[ 670]    074C: 74 6D                                 je  cmp_first_sub
+[ 671]    074E: C3                                    ret
+[ 672]        :                                       
+[ 673]    074F:                                       cmp_finish_mult: ; Fin de Comparación y retorno a rutina principal
+[ 674]        :                                       
+[ 675]    074F: A1 0B 09                              mov ax,rx
+[ 676]    0752: 8B 1E 01 09                           mov bx,fourth_number
+[ 677]    0756: F7 E3                                 mul bx
+[ 678]    0758: A3 0B 09                              mov rx,ax
+[ 679]    075B: E9 02 FA                              jmp finish
+[ 680]        :                                       
+[ 681]    075E:                                       cmp_first_div: ; Comparación de Divisiones
+[ 682]        :                                       
+[ 683]    075E: A1 0B 09                              mov ax,rx
+[ 684]    0761: 8B 1E FF 08                           mov bx,third_number
+[ 685]    0765: F7 F3                                 div bx
+[ 686]    0767: A3 0B 09                              mov rx,ax
+[ 687]    076A: 80 3E 06 09 2A                        cmp fourth_value,42
+[ 688]    076F: 74 DE                                 je  cmp_finish_mult
+[ 689]    0771: 80 3E 06 09 2F                        cmp fourth_value,47
+[ 690]    0776: 74 0F                                 je  cmp_finish_div
+[ 691]    0778: 80 3E 06 09 2B                        cmp fourth_value,43
+[ 692]    077D: 74 17                                 je  cmp_first_add
+[ 693]    077F: 80 3E 06 09 2D                        cmp fourth_value,45
+[ 694]    0784: 74 35                                 je  cmp_first_sub
+[ 695]    0786: C3                                    ret
+[ 696]        :                                       
+[ 697]    0787:                                       cmp_finish_div: ; Fin de Comparación y retorno a rutina principal
+[ 698]        :                                       
+[ 699]    0787: A1 0B 09                              mov ax,rx
+[ 700]    078A: 8B 1E 01 09                           mov bx,fourth_number
+[ 701]    078E: F7 F3                                 div bx
+[ 702]    0790: A3 0B 09                              mov rx,ax
+[ 703]    0793: E9 CA F9                              jmp finish
+[ 704]        :                                       
+[ 705]        :                                       ; ---------- Sumas / Restas al Resultado Final ---------- ;
+[ 706]        :                                       
+[ 707]    0796:                                       cmp_first_add:
+[ 708]        :                                       
+[ 709]    0796: A1 01 09                              mov ax,fourth_number
+[ 710]    0799: 01 06 0B 09                           add rx,ax
+[ 711]    079D: C3                                    ret
+[ 712]        :                                       
+[ 713]    079E:                                       cmp_second_add:
+[ 714]        :                                       
+[ 715]    079E: A1 01 09                              mov ax,fourth_number
+[ 716]    07A1: 01 06 0B 09                           add rx,ax
+[ 717]    07A5: 80 3E 03 09 2B                        cmp first_value,43
+[ 718]    07AA: 74 07                                 je  cmp_finish_add
+[ 719]    07AC: 80 3E 03 09 2D                        cmp first_value,45
+[ 720]    07B1: 74 25                                 je  cmp_finish_sub
+[ 721]        :                                       
+[ 722]    07B3:                                       cmp_finish_add:
+[ 723]        :                                       
+[ 724]    07B3: A1 FB 08                              mov ax,first_number
+[ 725]    07B6: 01 06 0B 09                           add rx,ax
+[ 726]    07BA: C3                                    ret
+[ 727]        :                                       
+[ 728]    07BB:                                       cmp_first_sub:
+[ 729]        :                                       
+[ 730]    07BB: A1 01 09                              mov ax,fourth_number
+[ 731]    07BE: 29 06 0B 09                           sub rx,ax
+[ 732]    07C2: C3                                    ret
+[ 733]        :                                       
+[ 734]    07C3:                                       cmp_second_sub:
+[ 735]        :                                       
+[ 736]    07C3: A1 01 09                              mov ax,fourth_number
+[ 737]    07C6: 29 06 0B 09                           sub rx,ax
+[ 738]    07CA: 80 3E 03 09 2B                        cmp first_value,43
+[ 739]    07CF: 74 E2                                 je  cmp_finish_add
+[ 740]    07D1: 80 3E 03 09 2D                        cmp first_value,45
+[ 741]    07D6: 74 00                                 je  cmp_finish_sub
+[ 742]        :                                       
+[ 743]    07D8:                                       cmp_finish_sub:
+[ 744]        :                                       
+[ 745]    07D8: A1 FB 08                              mov ax,first_number
+[ 746]    07DB: 29 06 0B 09                           sub rx,ax
+[ 747]    07DF: C3                                    ret
+[ 748]        :                                       
+[ 749]    07E0:                                       cmp_second_mult:
+[ 750]        :                                       
+[ 751]    07E0: A1 0B 09                              mov ax,rx
+[ 752]    07E3: 8B 1E 01 09                           mov bx,fourth_number
+[ 753]    07E7: F7 E3                                 mul bx
+[ 754]    07E9: A3 0B 09                              mov rx,ax
+[ 755]    07EC: 80 3E 03 09 2B                        cmp first_value,43
+[ 756]    07F1: 74 C0                                 je  cmp_finish_add
+[ 757]    07F3: 80 3E 03 09 2D                        cmp first_value,45
+[ 758]    07F8: 74 DE                                 je  cmp_finish_sub
+[ 759]    07FA: C3                                    ret
+[ 760]        :                                       
+[ 761]    07FB:                                       cmp_second_div:
+[ 762]        :                                       
+[ 763]    07FB: A1 0B 09                              mov ax,rx
+[ 764]    07FE: 8B 1E 01 09                           mov bx,fourth_number
+[ 765]    0802: F7 F3                                 div bx
+[ 766]    0804: A3 0B 09                              mov rx,ax
+[ 767]    0807: 80 3E 03 09 2B                        cmp first_value,43
+[ 768]    080C: 74 A5                                 je  cmp_finish_add
+[ 769]    080E: 80 3E 03 09 2D                        cmp first_value,45
+[ 770]    0813: 74 C3                                 je  cmp_finish_sub
+[ 771]    0815: C3                                    ret
+[ 772]        :                                       
+[ 773]        :                                       ; ---------- Helpers ---------- ;
+[ 774]        :                                       
+[ 775]    0816:                                       third_helper_add:
+[ 776]        :                                       
+[ 777]    0816: A1 FB 08                              mov ax,first_number
+[ 778]    0819: 01 06 0B 09                           add rx,ax
+[ 779]        :                                       
+[ 780]    081D: 80 3E 04 09 2B                        cmp second_value,43
+[ 781]    0822: 74 1C                                 je  last_add
+[ 782]    0824: 80 3E 04 09 2D                        cmp second_value,45
+[ 783]    0829: 74 1D                                 je  last_sub
+[ 784]        :                                       
+[ 785]    082B:                                       third_helper_sub:
+[ 786]        :                                       
+[ 787]    082B: A1 FB 08                              mov ax,first_number
+[ 788]    082E: 29 06 0B 09                           sub rx,ax
+[ 789]        :                                       
+[ 790]    0832: 80 3E 04 09 2B                        cmp second_value,43
+[ 791]    0837: 74 07                                 je  last_add
+[ 792]    0839: 80 3E 04 09 2D                        cmp second_value,45
+[ 793]    083E: 74 08                                 je  last_sub
+[ 794]        :                                       
+[ 795]    0840:                                       last_add:
+[ 796]        :                                       
+[ 797]    0840: A1 FD 08                              mov ax,second_number
+[ 798]    0843: 01 06 0B 09                           add rx,ax
+[ 799]    0847: C3                                    ret
+[ 800]        :                                       
+[ 801]    0848:                                       last_sub:
+[ 802]        :                                       
+[ 803]    0848: A1 FD 08                              mov ax,second_number
+[ 804]    084B: 29 06 0B 09                           sub rx,ax
+[ 805]    084F: C3                                    ret
+[ 806]        :                                       
+[ 807]        :                                       ; --------- Apartado de Signos (S/R) ---------- ;:
+[ 808]        :                                       
+[ 809]    0850:                                       only_adds:
+[ 810]        :                                       
+[ 811]    0850: 80 3E 03 09 2B                        cmp first_value,43
+[ 812]    0855: 75 31                                 jne  only_subs
+[ 813]    0857: 80 3E 04 09 2B                        cmp second_value,43
+[ 814]    085C: 75 2A                                 jne  only_subs
+[ 815]    085E: 80 3E 05 09 2B                        cmp third_value,43
+[ 816]    0863: 75 23                                 jne  only_subs
+[ 817]    0865: 80 3E 06 09 2B                        cmp fourth_value,43
+[ 818]    086A: 75 1C                                 jne  only_subs
+[ 819]        :                                       
+[ 820]    086C: A1 FB 08                              mov ax,first_number
+[ 821]    086F: A3 0B 09                              mov rx,ax
+[ 822]    0872: A1 FD 08                              mov ax,second_number
+[ 823]    0875: 01 06 0B 09                           add rx,ax
+[ 824]    0879: A1 FF 08                              mov ax,third_number
+[ 825]    087C: 01 06 0B 09                           add rx,ax
+[ 826]    0880: A1 01 09                              mov ax,fourth_number
+[ 827]        :                                       
+[ 828]    0883: 01 06 0B 09                           add rx,ax
+[ 829]        :                                       
+[ 830]    0887: C3                                    ret
+[ 831]        :                                       
+[ 832]    0888:                                       only_subs:
+[ 833]        :                                       
+[ 834]    0888: 80 3E 03 09 2D                        cmp  first_value,45
+[ 835]    088D: 74 03 E9 C3 FA                        jne  only_negatives
+[ 836]    0892: 80 3E 04 09 2D                        cmp  second_value,45
+[ 837]    0897: 74 03 E9 B9 FA                        jne  only_negatives
+[ 838]    089C: 80 3E 05 09 2D                        cmp  third_value,45
+[ 839]    08A1: 74 03 E9 AF FA                        jne  only_negatives
+[ 840]    08A6: 80 3E 06 09 2D                        cmp  fourth_value,45
+[ 841]    08AB: 74 03 E9 A5 FA                        jne  only_negatives
+[ 842]        :                                       
+[ 843]    08B0: A1 FB 08                              mov ax,first_number
+[ 844]    08B3: A3 0B 09                              mov rx,ax
+[ 845]    08B6: A1 FD 08                              mov ax,second_number
+[ 846]    08B9: 01 06 0B 09                           add rx,ax
+[ 847]    08BD: A1 FF 08                              mov ax,third_number
+[ 848]    08C0: 01 06 0B 09                           add rx,ax
+[ 849]    08C4: A1 01 09                              mov ax,fourth_number
+[ 850]        :                                       
+[ 851]    08C7: 01 06 0B 09                           add rx,ax
+[ 852]        :                                       
+[ 853]    08CB: B3 01                                 mov bl,1
+[ 854]    08CD: 88 1E 09 09                           mov flag,bl
+[ 855]        :                                       
+[ 856]    08D1: C3                                    ret
+[ 857]        :                                       
+[ 858]        :                                       ; ---------- Variables ---------- ;
+[ 859]        :                                       
+[ 860]    08D2: 00 00 00 00 00 00 00 00 00 00 00 00   string          db      30  dup (0)
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00                   
+[ 861]    08F0: 19                                    row             db      25
+[ 862]    08F1: 00 00 00 00 00                        string_out      db      5   dup(0)
+[ 863]    08F6: 00 00 00 00 00                        print_result    db      5   dup(0)
+[ 864]        :                                       
+[ 865]    08FB: 00 00                                 first_number    dw      0
+[ 866]    08FD: 00 00                                 second_number   dw      0
+[ 867]    08FF: 00 00                                 third_number    dw      0
+[ 868]    0901: 00 00                                 fourth_number   dw      0
+[ 869]        :                                       
+[ 870]    0903: 00                                    first_value     db      0
+[ 871]    0904: 00                                    second_value    db      0
+[ 872]    0905: 00                                    third_value     db      0
+[ 873]    0906: 00                                    fourth_value    db      0
+[ 874]        :                                       
+[ 875]    0907: 00                                    digit           db      0
+[ 876]    0908: 00                                    helper          db      0
+[ 877]    0909: 00                                    flag            db      0
+[ 878]    090A: 00                                    aux             db      0
+[ 879]        :                                       
+[ 880]    090B: 00 00                                 rx              dw      0
+[ 881]        :                                       
+[ 882]        :                                       ; ---------- Data de los Prints ---------- ;
+[ 883]        :                                       
+[ 884]    090D: 53 65 63 63 69 6F 6E 20 44 30 35 20   msg1:       db "Seccion D05 - Abraham Magana Hernandez - 2022B."
+                2D 20 41 62 72 61 68 61 6D 20 4D 61 
+                67 61 6E 61 20 48 65 72 6E 61 6E 64 
+                65 7A 20 2D 20 32 30 32 32 42 2E    
+[ 885]    093C: 41 6E 61 6C 69 73 69 73 20 4C 65 78   msg2:       db "Analisis Lexico * / + -."
+                69 63 6F 20 2A 20 2F 20 2B 20 2D 2E 
+                                                    
+[ 886]    0954: 52 65 63 75 65 72 64 61 20 69 6E 74   msg3:       db "Recuerda introducir el primer signo al inicio."
+                72 6F 64 75 63 69 72 20 65 6C 20 70 
+                72 69 6D 65 72 20 73 69 67 6E 6F 20 
+                61 6C 20 69 6E 69 63 69 6F 2E       
+[ 887]    0982: 4C 61 20 45 63 75 61 63 69 6F 6E 20   msg4:       db "La Ecuacion es:  "
+                65 73 3A 20 20                      
+[ 888]    0993: 45 6C 20 52 65 73 75 6C 74 61 64 6F   msg5:       db "El Resultado es:  "
+                20 65 73 3A 20 20                   
+[ 889]        :                                       
+[ 890]    09A5:                                       msg_tail:
+[ 891]        :                                       
+[ 892]        :                                       msg1_size = msg2 - msg1
+[ 893]        :                                       msg2_size = msg3 - msg2
+[ 894]        :                                       msg3_size = msg4 - msg3
+[ 895]        :                                       msg4_size = msg5 - msg4
+[ 896]        :                                       msg5_size = msg_tail - msg5
+[ 897]        :                                       
+ 
+===================================================================================================
+ 
+
+
+
+
+===================================================================================================

@@ -150,7 +150,7 @@ first_dec:
     cmp     input[0], 15
     jle     second_dec
     sub     input[0], 20h
-        
+    
 second_dec:   
 
     sub     input[1],30h  
